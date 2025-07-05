@@ -582,172 +582,225 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
 
 /* --- Print-Specific Styles (For PDF generation) --- */
 @media print {
-    /* 1. Force Light Mode for Print */
+    /* 1. Overall Page and Font Adjustments */
     body, body.dark-mode {
         background-color: white !important;
         color: black !important;
-        font-size: 9pt !important; /* Smaller base font for print */
+        font-size: 8.5pt !important; /* Smaller base font for print */
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: auto !important;
+        display: block !important; /* Allow normal document flow for print */
     }
-    body.dark-mode .container,
     .container {
         background-color: white !important;
         color: black !important;
         border: none !important; /* Remove border in print */
         box-shadow: none !important; /* Remove shadow in print */
-        padding: 15mm !important; /* Smaller print margins */
+        padding: 12mm !important; /* A4 friendly margins */
         margin: 0 !important; /* No external margins */
-        max-width: 100% !important; /* Allow container to use full page width */
-    }
-    h1, h2,
-    body.dark-mode h1, body.dark-mode h2 {
-        color: black !important; /* Ensure headings are black */
-    }
-    h1 {
-        font-size: 2.2em !important; /* Smaller H1 */
-        margin-bottom: 5mm !important;
-    }
-    h2 {
-        font-size: 1.4em !important; /* Smaller H2 */
-        margin-top: 10mm !important;
-        margin-bottom: 5mm !important;
-    }
-    hr, body.dark-mode hr {
-        background-color: #ccc !important; /* Lighter hr for print */
-        margin: 10mm 0 !important; /* Smaller separator margins */
-    }
-
-    /* Ensure specific text colors are black in print */
-    .bill-header h1,
-    .customer-details h2,
-    .bill-items h2,
-    .bill-totals p strong,
-    table th,
-    table td {
-        color: black !important;
-    }
-
-    /* Input fields should appear as plain text in print */
-    input[type="text"],
-    input[type="number"],
-    input[type="email"],
-    input[type="date"],
-    .bill-items td input {
-        border: none !important; /* No border for inputs */
-        background-color: transparent !important; /* Transparent background */
-        padding: 2px 0 !important;
-        width: auto !important; /* Adjust width as needed for content */
-        display: inline-block !important; /* Allow labels to be next to them */
-        color: black !important; /* Ensure text is black */
-        font-size: 1em !important; /* Keep relative to new base font */
-    }
-
-    /* Specifically target customer and bill info inputs for a dashed underline in print */
-    .customer-details .input-group input,
-    .bill-info input {
-        border-bottom: 1px dashed #ccc !important; /* Subtle line for input areas */
-        min-width: 150px; /* Ensure enough space for content */
-    }
-
-    /* Specific adjustments for read-only inputs in print mode */
-    .company-details .input-group input[readonly],
-    .customer-details .input-group input[readonly] {
-        background-color: transparent !important;
-        border: none !important;
-        cursor: default !important;
-        padding: 0 !important; /* Remove padding for a more text-like appearance */
-        color: black !important;
-        font-weight: 400 !important;
-    }
-
-    /* Smaller spacing for general paragraphs */
-    .bill-info p, .bill-totals p {
-        font-size: 1em !important; /* Consistent with base font */
-        margin-bottom: 2mm !important;
-    }
-
-    /* Tighter spacing for customer details input groups */
-    .customer-details .input-group {
-        margin-bottom: 2mm !important;
-        gap: 5mm !important; /* Smaller gap for customer details */
-    }
-    .customer-details .input-group label {
-        width: 30mm !important; /* Adjust label width for tighter fit */
-        text-align: right !important;
-    }
-    .customer-details .input-group input {
-        max-width: calc(100% - 35mm) !important; /* Adjust max-width based on new label width */
-    }
-
-    /* Smaller cell padding and font for table items */
-    .bill-items th, .bill-items td {
-        padding: 5mm !important; /* Smaller cell padding */
-        font-size: 0.9em !important; /* Smaller table text */
+        max-width: 100% !important; /* Use full page width */
+        width: auto !important; /* Auto width based on padding */
+        height: auto !important; /* Auto height to fit content */
+        box-sizing: border-box !important;
     }
     
-    /* Adjust spacing for signature and actions */
+    /* 2. Header Restructuring (Invoice title left, Company Details right) */
+    .bill-header {
+        display: flex !important; /* Use flexbox for header layout */
+        justify-content: space-between !important; /* Push title left, company right */
+        align-items: flex-start !important; /* Align items to the top */
+        text-align: left !important; /* Default text alignment */
+        margin-bottom: 10mm !important; /* Space below header */
+    }
+    .bill-header h1 {
+        font-size: 2.5em !important; /* Prominent "BILL" title */
+        margin-bottom: 0 !important; /* No bottom margin on heading */
+        color: black !important; /* Ensure black */
+        text-align: left !important;
+        flex-grow: 1 !important; /* Allow it to take available space */
+    }
+    .company-details {
+        text-align: right !important; /* Align company info to the right */
+        flex-shrink: 0 !important; /* Prevent shrinking */
+        width: 45% !important; /* Allocate specific width */
+        margin-top: 0 !important; /* No top margin */
+    }
+    .company-details .input-group {
+        margin-bottom: 2mm !important; /* Tighter spacing for company details */
+        display: block !important; /* Ensure input groups stack vertically */
+    }
+    /* Make company details inputs appear as plain text, no labels */
+    .company-details input[readonly] {
+        border: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+        font-size: 1em !important; /* Relative to base font */
+        color: black !important;
+        cursor: default !important;
+        text-align: right !important; /* Keep text right-aligned */
+    }
+    .company-details .input-group label {
+        display: none !important; /* Hide labels for company details in print */
+    }
+
+    /* 3. Bill Info (Bill No, Date) Alignment */
+    .bill-info {
+        display: flex !important;
+        flex-direction: column !important; /* Stack Bill No and Date */
+        align-items: flex-end !important; /* Align to the right */
+        margin-top: 5mm !important; /* Space from header */
+        margin-bottom: 10mm !important; /* Space before customer details */
+    }
+    .bill-info p {
+        display: flex !important; /* Keep label and input on one line */
+        justify-content: flex-end !important; /* Push to right */
+        align-items: center !important;
+        margin-bottom: 2mm !important;
+        font-size: 1em !important;
+    }
+    .bill-info strong {
+        flex-shrink: 0 !important;
+        margin-right: 5mm !important; /* Space between label and value */
+        width: auto !important;
+    }
+    .bill-info input {
+        border: none !important;
+        border-bottom: 1px dashed #ccc !important; /* Underline for values */
+        background-color: transparent !important;
+        padding: 2px 0 !important;
+        color: black !important;
+        font-size: 1em !important;
+        text-align: right !important; /* Align value to right */
+        width: 50mm !important; /* Fixed width for values */
+        box-sizing: border-box !important;
+    }
+
+
+    /* 4. Customer Details Layout */
+    .customer-details {
+        margin-top: 10mm !important; /* Space from bill info */
+        padding-bottom: 10mm !important;
+    }
+    .customer-details h2 {
+        font-size: 1.3em !important; /* "Bill To:" heading size */
+        margin-bottom: 5mm !important;
+        color: black !important;
+    }
+    .customer-details .input-group {
+        margin-bottom: 2mm !important; /* Tighter spacing */
+        gap: 5mm !important; /* Smaller gap */
+    }
+    .customer-details .input-group label {
+        width: 30mm !important; /* Narrower labels */
+        text-align: right !important;
+        font-size: 1em !important;
+        margin-bottom: 0 !important;
+    }
+    .customer-details .input-group input {
+        border: none !important;
+        border-bottom: 1px dashed #ccc !important; /* Underline for input areas */
+        background-color: transparent !important;
+        padding: 2px 0 !important;
+        color: black !important;
+        font-size: 1em !important;
+        max-width: calc(100% - 35mm) !important; /* Adjust max-width based on label width */
+    }
+
+    /* 5. Items Table */
+    .bill-items {
+        margin-top: 10mm !important;
+    }
+    .bill-items h2 {
+        font-size: 1.3em !important;
+        margin-bottom: 5mm !important;
+        color: black !important;
+    }
+    .bill-items table {
+        margin-top: 5mm !important;
+    }
+    .bill-items th, .bill-items td {
+        padding: 4mm 2mm !important; /* Tighter cell padding */
+        font-size: 0.9em !important; /* Smaller table text */
+        border-color: #ddd !important; /* Ensure borders are visible */
+    }
+    .bill-items td input {
+        padding: 0 !important; /* No internal padding for table inputs */
+        font-size: 1em !important;
+    }
+
+    /* 6. Totals Section */
+    .bill-totals {
+        margin-top: 10mm !important;
+        font-size: 1em !important;
+        line-height: 1.4 !important; /* Slightly more compact lines */
+    }
+    .bill-totals p {
+        margin-bottom: 2mm !important; /* Tighter line spacing */
+    }
+    .bill-totals input[type="number"] {
+        width: 25mm !important; /* Fixed width for tax/discount input */
+        padding: 2px !important;
+        border: 1px solid #ccc !important; /* Keep border for these inputs */
+        font-size: 1em !important;
+        color: black !important;
+        text-align: right !important;
+    }
+    /* Ensure spans align */
+    .bill-totals p span {
+        min-width: 30mm !important; /* Align values */
+        text-align: right !important;
+        display: inline-block !important;
+    }
+
+
+    /* 7. Signature Section */
     .signature-section {
-        margin-top: 20mm !important;
-        padding-top: 5mm !important;
+        margin-top: 25mm !important; /* More space at bottom */
+        padding-top: 10mm !important;
+        border-top: 1px solid #eee !important;
+        text-align: right !important;
+    }
+    .signature-section p {
+        font-size: 0.9em !important;
+        margin-bottom: 5mm !important;
     }
     .signature-line {
-        width: 50mm !important; /* Make signature line shorter if space is tight */
-        margin: 5mm 0 0 auto !important;
-    }
-    .actions {
-        margin-top: 15mm !important;
-    }
-    .actions button {
-        padding: 8mm 15mm !important; /* Smaller button padding */
-        font-size: 0.9em !important;
+        width: 60mm !important; /* Adjusted length for signature line */
+        margin: 5mm 0 0 auto !important; /* Center the line */
+        background-color: black !important;
     }
 
-    /* 2. Hide "Add Item" button and individual delete buttons */
+    /* 8. Hide Unnecessary UI elements for Print */
     #add-item,
-    .delete-item-btn {
-        display: none !important;
-    }
-
-    /* Hide the Reset Form button as it's not needed in PDF */
-    #reset-form {
-        display: none !important;
-    }
-
-    /* Hide other UI elements not needed in print */
+    .delete-item-btn,
+    #reset-form,
     #control-panel,
     #three-background,
-    .modal {
+    .modal,
+    .checkbox-container { /* Hide any remaining checkboxes */
         display: none !important;
     }
 
-    /* Adjust layout of actions section if buttons are hidden */
     .actions {
-        display: flex; /* Use flexbox to center/space buttons */
-        justify-content: center; /* Center the remaining "Generate Bill" button */
-        gap: 0; /* No gap needed if only one button left */
+        display: flex !important;
+        justify-content: center !important; /* Center the 'Generate Bill' button */
+        margin-top: 15mm !important;
+        gap: 0 !important;
     }
-    /* Ensure no margins/paddings from hidden elements affect layout */
-    .container {
-        margin: 0 auto !important; /* Center on page */
-        box-shadow: none !important; /* Remove shadow */
-        border: none !important; /* Remove border */
+    .actions button {
+        padding: 8mm 15mm !important;
+        font-size: 1em !important;
     }
-    /* Remove padding/margin from body to use full page */
-    body {
-        padding: 0 !important;
-        margin: 0 !important;
-        /* Ensure that the content fills the page more */
-        display: block !important;
-        min-height: auto !important;
-        align-items: flex-start !important;
-        justify-content: flex-start !important;
-    }
-    /* Ensure table borders are visible */
-    table, th, td {
-        border-color: #ddd !important;
+
+    /* Ensure all HRs are thin and visible */
+    hr {
+        height: 1px !important;
+        background-color: #ddd !important;
     }
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for screen view (these are not for print) */
 @media (max-width: 768px) {
     .container {
         margin: 20px 10px;
