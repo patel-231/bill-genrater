@@ -582,7 +582,7 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
 
 /* --- Print-Specific Styles (For PDF generation) --- */
 @media print {
-    /* 1. Overall Page and Font Adjustments */
+    /* Overall Page and Font Adjustments */
     body, body.dark-mode {
         background-color: white !important;
         color: black !important;
@@ -603,161 +603,191 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         width: auto !important; /* Auto width based on padding */
         height: auto !important; /* Auto height to fit content */
         box-sizing: border-box !important;
+        position: relative !important; /* Make container a positioning context */
     }
     
-    /* 2. Header Restructuring (Invoice title left, Company Details right) */
-    .bill-header {
-        display: flex !important; /* Use flexbox for header layout */
-        justify-content: space-between !important; /* Push title left, company right */
-        align-items: flex-start !important; /* Align items to the top */
-        text-align: left !important; /* Default text alignment */
-        margin-bottom: 10mm !important; /* Space below header */
+    /* 1. Company Name (H1) in Big Font, Center, Upper Side */
+    .bill-header { /* This contains H1 and company-details in screen view */
+        position: relative !important; /* Allow absolute positioning inside */
+        text-align: center !important; /* Center the H1 within this header */
+        margin-bottom: 0 !important; /* Remove screen margin */
+        padding-top: 5mm !important; /* Slight padding from top edge of page */
     }
-    .bill-header h1 {
-        font-size: 2.5em !important; /* Prominent "BILL" title */
-        margin-bottom: 0 !important; /* No bottom margin on heading */
-        color: black !important; /* Ensure black */
-        text-align: left !important;
-        flex-grow: 1 !important; /* Allow it to take available space */
-    }
-    .company-details {
-        text-align: right !important; /* Align company info to the right */
-        flex-shrink: 0 !important; /* Prevent shrinking */
-        width: 45% !important; /* Allocate specific width */
-        margin-top: 0 !important; /* No top margin */
-    }
-    .company-details .input-group {
-        margin-bottom: 2mm !important; /* Tighter spacing for company details */
-        display: block !important; /* Ensure input groups stack vertically */
-    }
-    /* Make company details inputs appear as plain text, no labels */
-    .company-details input[readonly] {
-        border: none !important;
-        background-color: transparent !important;
-        padding: 0 !important;
-        font-size: 1em !important; /* Relative to base font */
+    .bill-header h1 { /* This is "BILL" in current setup, assume it's company name for print */
+        font-size: 2.8em !important; /* Big font for Company Name/Document Title */
         color: black !important;
-        cursor: default !important;
-        text-align: right !important; /* Keep text right-aligned */
-    }
-    .company-details .input-group label {
-        display: none !important; /* Hide labels for company details in print */
+        margin-bottom: 5mm !important;
+        text-align: center !important;
     }
 
-    /* 3. Bill Info (Bill No, Date) Alignment */
-    .bill-info {
-        display: flex !important;
-        flex-direction: column !important; /* Stack Bill No and Date */
-        align-items: flex-end !important; /* Align to the right */
-        margin-top: 5mm !important; /* Space from header */
-        margin-bottom: 10mm !important; /* Space before customer details */
+    /* 2. Bill No. and Bill Date (left side under company name) */
+    .bill-info { /* Bill No & Date */
+        position: absolute !important; /* Take it out of normal flow */
+        top: 35mm !important; /* Position below company name H1 */
+        left: 12mm !important; /* Align to left print margin */
+        width: 45% !important; /* Allocate space */
+        text-align: left !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
     .bill-info p {
-        display: flex !important; /* Keep label and input on one line */
-        justify-content: flex-end !important; /* Push to right */
-        align-items: center !important;
+        display: block !important; /* Stack bill no and date */
         margin-bottom: 2mm !important;
         font-size: 1em !important;
+        display: flex !important; /* Keep label and input inline */
+        justify-content: flex-start !important; /* Align content to start */
+        align-items: baseline !important;
     }
-    .bill-info strong {
+    .bill-info strong { /* For "Bill No:" and "Date:" labels */
         flex-shrink: 0 !important;
-        margin-right: 5mm !important; /* Space between label and value */
-        width: auto !important;
+        margin-right: 5mm !important;
+        min-width: 25mm !important; /* Ensure labels align */
+        text-align: left !important;
     }
     .bill-info input {
         border: none !important;
         border-bottom: 1px dashed #ccc !important; /* Underline for values */
         background-color: transparent !important;
         padding: 2px 0 !important;
+        width: 40mm !important; /* Fixed width for value */
+        text-align: left !important; /* Values align left under labels */
         color: black !important;
         font-size: 1em !important;
-        text-align: right !important; /* Align value to right */
-        width: 50mm !important; /* Fixed width for values */
         box-sizing: border-box !important;
     }
 
-
-    /* 4. Customer Details Layout */
-    .customer-details {
-        margin-top: 10mm !important; /* Space from bill info */
-        padding-bottom: 10mm !important;
+    /* 3. Company Details (right side under company name) */
+    .company-details { /* Company Name, Address, etc. */
+        position: absolute !important; /* Take it out of normal flow */
+        top: 35mm !important; /* Align with bill-info top */
+        right: 12mm !important; /* Align to right print margin */
+        width: 45% !important; /* Allocate space */
+        text-align: right !important;
+        margin-top: 0 !important; /* Remove screen margin */
+        padding: 0 !important;
     }
-    .customer-details h2 {
-        font-size: 1.3em !important; /* "Bill To:" heading size */
+    .company-details .input-group { /* Each detail line */
+        margin-bottom: 2mm !important;
+        display: block !important; /* Stack details */
+    }
+    .company-details input[readonly] {
+        display: block !important; /* Ensure content flows as block */
+        padding: 0 !important;
+        font-size: 1em !important; /* Relative to base font */
+        text-align: right !important; /* Keep text right-aligned */
+        color: black !important;
+        border: none !important;
+        background: transparent !important;
+    }
+    .company-details label {
+        display: none !important; /* Hide labels for read-only company details in print */
+    }
+
+    /* 4. Line Between Customer Details and Company/Header Details */
+    hr {
+        position: absolute !important;
+        top: 70mm !important; /* Position below absolute header elements */
+        left: 12mm !important;
+        width: calc(100% - 24mm) !important; /* Full width minus page margins */
+        height: 1px !important;
+        background-color: #ddd !important;
+        margin: 0 !important; /* Remove normal hr margins */
+    }
+
+    /* 5. Customer Details (left side, under the line, answers on right under line) */
+    .customer-details {
+        margin-top: 80mm !important; /* Push down below absolute header and HR */
+        margin-left: 12mm !important; /* Align to left margin */
+        width: calc(100% - 24mm) !important; /* Full width for its content */
+        padding-bottom: 5mm !important; /* Reduced padding */
+        position: relative !important; /* Ensure it starts normal flow after absolute elements */
+    }
+    .customer-details h2 { /* "Bill To:" */
+        text-align: left !important; /* Ensure "Bill To:" is left */
         margin-bottom: 5mm !important;
         color: black !important;
+        font-size: 1.3em !important;
     }
     .customer-details .input-group {
+        display: flex !important; /* Keep labels and answers on same line */
+        justify-content: space-between !important; /* Push label left, answer right */
+        align-items: baseline !important;
         margin-bottom: 2mm !important; /* Tighter spacing */
-        gap: 5mm !important; /* Smaller gap */
     }
     .customer-details .input-group label {
-        width: 30mm !important; /* Narrower labels */
-        text-align: right !important;
+        flex-shrink: 0 !important;
+        width: 40mm !important; /* Label width */
+        text-align: left !important;
         font-size: 1em !important;
         margin-bottom: 0 !important;
     }
     .customer-details .input-group input {
+        flex-grow: 1 !important; /* Answer takes remaining space */
+        text-align: right !important; /* Answer aligned to right */
         border: none !important;
-        border-bottom: 1px dashed #ccc !important; /* Underline for input areas */
-        background-color: transparent !important;
-        padding: 2px 0 !important;
+        border-bottom: 1px dashed #ccc !important; /* Dashed underline for answers */
+        background: transparent !important;
+        padding: 0 !important;
         color: black !important;
         font-size: 1em !important;
-        max-width: calc(100% - 35mm) !important; /* Adjust max-width based on label width */
+        box-sizing: border-box !important;
     }
 
-    /* 5. Items Table */
+    /* 6. Item Details in center and under customer details (default flow) */
     .bill-items {
-        margin-top: 10mm !important;
-    }
-    .bill-items h2 {
-        font-size: 1.3em !important;
-        margin-bottom: 5mm !important;
-        color: black !important;
+        margin-top: 10mm !important; /* Space after customer details */
+        text-align: center !important; /* Ensure table is centered */
+        width: 100% !important; /* Take full width */
     }
     .bill-items table {
-        margin-top: 5mm !important;
+        width: 100% !important; /* Table occupies full items section */
+        margin-left: auto !important; /* Center table */
+        margin-right: auto !important;
     }
     .bill-items th, .bill-items td {
-        padding: 4mm 2mm !important; /* Tighter cell padding */
-        font-size: 0.9em !important; /* Smaller table text */
+        padding: 3mm 2mm !important; /* Even tighter cell padding */
+        font-size: 0.85em !important; /* Even smaller table text */
         border-color: #ddd !important; /* Ensure borders are visible */
+        vertical-align: top !important; /* Align content to top of cell */
     }
     .bill-items td input {
         padding: 0 !important; /* No internal padding for table inputs */
         font-size: 1em !important;
+        border: none !important;
+        background-color: transparent !important;
+        color: black !important;
+    }
+    .bill-items .item-total {
+        font-weight: 500 !important;
     }
 
-    /* 6. Totals Section */
+    /* 7. Bill Totals (already right-aligned) */
     .bill-totals {
         margin-top: 10mm !important;
         font-size: 1em !important;
-        line-height: 1.4 !important; /* Slightly more compact lines */
+        line-height: 1.4 !important;
     }
     .bill-totals p {
-        margin-bottom: 2mm !important; /* Tighter line spacing */
+        margin-bottom: 2mm !important;
     }
     .bill-totals input[type="number"] {
-        width: 25mm !important; /* Fixed width for tax/discount input */
+        width: 25mm !important;
         padding: 2px !important;
-        border: 1px solid #ccc !important; /* Keep border for these inputs */
+        border: 1px solid #ccc !important;
         font-size: 1em !important;
         color: black !important;
         text-align: right !important;
     }
-    /* Ensure spans align */
     .bill-totals p span {
-        min-width: 30mm !important; /* Align values */
+        min-width: 30mm !important;
         text-align: right !important;
         display: inline-block !important;
     }
 
-
-    /* 7. Signature Section */
+    /* 8. Sign Space (bottom right corner) */
     .signature-section {
-        margin-top: 25mm !important; /* More space at bottom */
-        padding-top: 10mm !important;
+        margin-top: 20mm !important; /* Adjust if table/totals are very long */
+        padding-top: 5mm !important;
         border-top: 1px solid #eee !important;
         text-align: right !important;
     }
@@ -766,19 +796,13 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         margin-bottom: 5mm !important;
     }
     .signature-line {
-        width: 60mm !important; /* Adjusted length for signature line */
-        margin: 5mm 0 0 auto !important; /* Center the line */
+        width: 50mm !important; /* Adjusted length for signature line */
+        margin: 5mm 0 0 auto !important; /* Keep it centered relative to its text */
         background-color: black !important;
     }
 
-    /* 8. Hide Unnecessary UI elements for Print */
-    #add-item,
-    .delete-item-btn,
-    #reset-form,
-    #control-panel,
-    #three-background,
-    .modal,
-    .checkbox-container { /* Hide any remaining checkboxes */
+    /* Hide Unnecessary UI elements for Print */
+    #three-background, .app-controls, .modal, #add-item, .delete-item-btn, #reset-form, .checkbox-container {
         display: none !important;
     }
 
@@ -791,12 +815,6 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
     .actions button {
         padding: 8mm 15mm !important;
         font-size: 1em !important;
-    }
-
-    /* Ensure all HRs are thin and visible */
-    hr {
-        height: 1px !important;
-        background-color: #ddd !important;
     }
 }
 
