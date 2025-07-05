@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Bill Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <canvas id="three-background"></canvas>
+
+    <div id="signInModal" class="modal">
+        <div class="modal-content">
+            <h2>Sign In</h2>
+            <p>Enter your credentials to access your saved data.</p>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button id="signInBtn">Sign In</button>
+            <button id="closeSignInModal" class="modal-close-btn">Cancel</button>
+            <p style="font-size: 0.9em; margin-top: 20px;">
+                <a href="#" id="createAccountLink">Don't have an account? Create one.</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="app-controls">
+            <button id="signInOptionBtn" class="control-button">Sign In</button>
+            <button id="toggleDarkModeBtn" class="control-button">Toggle Dark Mode</button>
+            <button id="lockCompanyDetailsBtn" class="control-button">Lock Company Details</button> <button id="clearCompanyDetailsBtn" class="control-button">Clear Company Details</button>
+        </div>
+
+        <div class="bill-header">
+            <h1>INVOICE</h1>
+            <div class="company-details">
+                <div class="input-group">
+                    <label for="company-name-input">Company Name:</label>
+                    <input type="text" id="company-name-input" placeholder="Your Company Name">
+                </div>
+                <div class="input-group">
+                    <label for="company-address-input">Address:</label>
+                    <input type="text" id="company-address-input" placeholder="Your Company Address">
+                </div>
+                <div class="input-group">
+                    <label for="company-city-input">City:</label>
+                    <input type="text" id="company-city-input" placeholder="City, State, Zip">
+                </div>
+                <div class="input-group">
+                    <label for="company-email-input">Email:</label>
+                    <input type="text" style="display:none;" autocomplete="email" name="email_dummy_company">
+                    <input type="email" id="company-email-input" placeholder="info@yourcompany.com" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="company-mobile-input">Mobile:</label>
+                    <input type="text" id="company-mobile-input" placeholder="+123 456 7890">
+                </div>
+                <div class="input-group">
+                    <label for="company-gst-input">GSTIN (Optional):</label>
+                    <input type="text" id="company-gst-input" placeholder="Your GSTIN">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="show-hide-gst"> Show My GST on Bill
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="customer-details">
+            <h2>Bill To:</h2>
+            <div class="input-group">
+                <label for="customer-name">Customer Name:</label>
+                <input type="text" id="customer-name" placeholder="Enter customer name">
+            </div>
+            <div class="input-group">
+                <label for="customer-address">Address:</label>
+                <input type="text" id="customer-address" placeholder="Enter customer address">
+            </div>
+            <div class="input-group">
+                <label for="customer-email">Email:</label>
+                <input type="text" style="display:none;" autocomplete="email" name="email_dummy_customer">
+                <input type="email" id="customer-email" placeholder="Enter customer email" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label for="customer-mobile">Mobile Number:</label>
+                <input type="text" id="customer-mobile" placeholder="Enter customer mobile">
+            </div>
+            <div class="input-group">
+                <label for="customer-gst">Customer GST Number (Optional):</label>
+                <input type="text" id="customer-gst" placeholder="Enter customer GSTIN">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="bill-info">
+            <p><strong>Bill No:</strong> <input type="text" id="bill-number" value="BILL-001"></p>
+            <p><strong>Date:</strong> <input type="date" id="bill-date"></p>
+        </div>
+
+        <hr>
+
+        <div class="bill-items">
+            <h2>Items:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th></th> </tr>
+                </thead>
+                <tbody id="item-list">
+                    </tbody>
+            </table>
+            <button id="add-item">Add Item</button>
+        </div>
+
+        <hr>
+
+        <div class="bill-totals">
+            <p><strong>Subtotal:</strong> <span id="subtotal">0.00</span></p>
+            <p><strong>Discount (%):</strong> <input type="number" id="discount-rate" value="0" min="0"> <span><span id="discount-amount">0.00</span></span></p>
+            <p><strong>Tax (%):</strong> <input type="number" id="tax-rate" value="0" min="0"> <span><span id="tax-amount">0.00</span></span></p>
+            <p><strong>Grand Total:</strong> <span id="grand-total">0.00</span></p>
+        </div>
+
+        <hr>
+
+        <div class="signature-section">
+            <p>For <span id="company-name-signature">Your Company Name</span></p>
+            <div class="signature-line"></div>
+            <p>Authorised Signatory</p>
+        </div>
+
+        <div class="actions">
+            <button id="generate-bill">Generate Bill (Print/PDF)</button>
+            <button id="reset-form">Reset</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
