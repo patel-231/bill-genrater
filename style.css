@@ -586,7 +586,7 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
     body, body.dark-mode {
         background-color: white !important;
         color: black !important;
-        /* Ensure all text is black */
+        font-size: 9pt !important; /* Smaller base font for print */
     }
     body.dark-mode .container,
     .container {
@@ -594,13 +594,26 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         color: black !important;
         border: none !important; /* Remove border in print */
         box-shadow: none !important; /* Remove shadow in print */
+        padding: 15mm !important; /* Smaller print margins */
+        margin: 0 !important; /* No external margins */
+        max-width: 100% !important; /* Allow container to use full page width */
     }
     h1, h2,
     body.dark-mode h1, body.dark-mode h2 {
         color: black !important; /* Ensure headings are black */
     }
+    h1 {
+        font-size: 2.2em !important; /* Smaller H1 */
+        margin-bottom: 5mm !important;
+    }
+    h2 {
+        font-size: 1.4em !important; /* Smaller H2 */
+        margin-top: 10mm !important;
+        margin-bottom: 5mm !important;
+    }
     hr, body.dark-mode hr {
         background-color: #ccc !important; /* Lighter hr for print */
+        margin: 10mm 0 !important; /* Smaller separator margins */
     }
 
     /* Ensure specific text colors are black in print */
@@ -625,6 +638,7 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         width: auto !important; /* Adjust width as needed for content */
         display: inline-block !important; /* Allow labels to be next to them */
         color: black !important; /* Ensure text is black */
+        font-size: 1em !important; /* Keep relative to new base font */
     }
 
     /* Specifically target customer and bill info inputs for a dashed underline in print */
@@ -643,6 +657,48 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         padding: 0 !important; /* Remove padding for a more text-like appearance */
         color: black !important;
         font-weight: 400 !important;
+    }
+
+    /* Smaller spacing for general paragraphs */
+    .bill-info p, .bill-totals p {
+        font-size: 1em !important; /* Consistent with base font */
+        margin-bottom: 2mm !important;
+    }
+
+    /* Tighter spacing for customer details input groups */
+    .customer-details .input-group {
+        margin-bottom: 2mm !important;
+        gap: 5mm !important; /* Smaller gap for customer details */
+    }
+    .customer-details .input-group label {
+        width: 30mm !important; /* Adjust label width for tighter fit */
+        text-align: right !important;
+    }
+    .customer-details .input-group input {
+        max-width: calc(100% - 35mm) !important; /* Adjust max-width based on new label width */
+    }
+
+    /* Smaller cell padding and font for table items */
+    .bill-items th, .bill-items td {
+        padding: 5mm !important; /* Smaller cell padding */
+        font-size: 0.9em !important; /* Smaller table text */
+    }
+    
+    /* Adjust spacing for signature and actions */
+    .signature-section {
+        margin-top: 20mm !important;
+        padding-top: 5mm !important;
+    }
+    .signature-line {
+        width: 50mm !important; /* Make signature line shorter if space is tight */
+        margin: 5mm 0 0 auto !important;
+    }
+    .actions {
+        margin-top: 15mm !important;
+    }
+    .actions button {
+        padding: 8mm 15mm !important; /* Smaller button padding */
+        font-size: 0.9em !important;
     }
 
     /* 2. Hide "Add Item" button and individual delete buttons */
