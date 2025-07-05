@@ -143,7 +143,7 @@ hr {
     margin-top: 20px;
 }
 
-/* NEW: Customer Details Layout (label on left, input on right) */
+/* Customer Details Layout (label on left, input on right) */
 .customer-details .input-group {
     display: flex; /* Use flexbox to put label and input on same line */
     align-items: center; /* Vertically align items */
@@ -586,7 +586,7 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
     body, body.dark-mode {
         background-color: white !important;
         color: black !important;
-        font-size: 8.5pt !important; /* Smaller base font for print */
+        font-size: 8pt !important; /* Slightly smaller base font for print */
         margin: 0 !important;
         padding: 0 !important;
         min-height: auto !important;
@@ -597,34 +597,52 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         color: black !important;
         border: none !important; /* Remove border in print */
         box-shadow: none !important; /* Remove shadow in print */
-        padding: 12mm !important; /* A4 friendly margins */
+        padding: 10mm !important; /* A4 friendly margins */
         margin: 0 !important; /* No external margins */
         max-width: 100% !important; /* Use full page width */
         width: auto !important; /* Auto width based on padding */
         height: auto !important; /* Auto height to fit content */
         box-sizing: border-box !important;
-        position: relative !important; /* Make container a positioning context */
+        position: relative !important; /* Make container a positioning context for absolute elements */
     }
     
-    /* 1. Company Name (H1) in Big Font, Center, Upper Side */
-    .bill-header { /* This contains H1 and company-details in screen view */
-        position: relative !important; /* Allow absolute positioning inside */
-        text-align: center !important; /* Center the H1 within this header */
-        margin-bottom: 0 !important; /* Remove screen margin */
-        padding-top: 5mm !important; /* Slight padding from top edge of page */
+    /* Hide the original H1 */
+    .bill-header h1 {
+        display: none !important;
     }
-    .bill-header h1 { /* This is "BILL" in current setup, assume it's company name for print */
-        font-size: 2.8em !important; /* Big font for Company Name/Document Title */
-        color: black !important;
-        margin-bottom: 5mm !important;
+
+    /* 1. Company Name (from input) in Big Font, Center, Upper Side */
+    /* Assuming #companyName is the ID of your Company Name input field */
+    #companyName {
+        display: block !important; /* Make it block-level for styling */
+        position: absolute !important;
+        top: 15mm !important; /* Position from top of the page */
+        left: 50% !important; /* Center horizontally */
+        transform: translateX(-50%) !important; /* Adjust for true centering */
+        font-size: 2.8em !important; /* Big font */
+        font-weight: bold !important;
         text-align: center !important;
+        color: black !important;
+        border: none !important; /* Remove input borders */
+        background: transparent !important; /* No background */
+        padding: 0 !important; /* No padding */
+        margin: 0 !important; /* No margin */
+        width: auto !important; /* Auto width based on content */
+        max-width: 180mm !important; /* Max width to fit within A4 margins */
+        white-space: nowrap; /* Prevent wrapping if short */
+        overflow: hidden; /* Hide overflow if text is too long */
+        text-overflow: ellipsis; /* Add ellipsis if hidden */
+    }
+    /* Ensure its label is hidden in print */
+    .company-details .input-group label[for="companyName"] {
+        display: none !important;
     }
 
     /* 2. Bill No. and Bill Date (left side under company name) */
     .bill-info { /* Bill No & Date */
         position: absolute !important; /* Take it out of normal flow */
-        top: 35mm !important; /* Position below company name H1 */
-        left: 12mm !important; /* Align to left print margin */
+        top: 50mm !important; /* Shifted down to accommodate large company name */
+        left: 10mm !important; /* Align to left print margin */
         width: 45% !important; /* Allocate space */
         text-align: left !important;
         padding: 0 !important;
@@ -632,7 +650,7 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
     }
     .bill-info p {
         display: block !important; /* Stack bill no and date */
-        margin-bottom: 2mm !important;
+        margin-bottom: 1.5mm !important; /* Tighter vertical spacing */
         font-size: 1em !important;
         display: flex !important; /* Keep label and input inline */
         justify-content: flex-start !important; /* Align content to start */
@@ -648,7 +666,7 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         border: none !important;
         border-bottom: 1px dashed #ccc !important; /* Underline for values */
         background-color: transparent !important;
-        padding: 2px 0 !important;
+        padding: 1px 0 !important;
         width: 40mm !important; /* Fixed width for value */
         text-align: left !important; /* Values align left under labels */
         color: black !important;
@@ -659,15 +677,19 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
     /* 3. Company Details (right side under company name) */
     .company-details { /* Company Name, Address, etc. */
         position: absolute !important; /* Take it out of normal flow */
-        top: 35mm !important; /* Align with bill-info top */
-        right: 12mm !important; /* Align to right print margin */
+        top: 50mm !important; /* Align with bill-info top, shifted down */
+        right: 10mm !important; /* Align to right print margin */
         width: 45% !important; /* Allocate space */
         text-align: right !important;
         margin-top: 0 !important; /* Remove screen margin */
         padding: 0 !important;
     }
+    /* Hide the input for Company Name here, as it's being displayed at the top */
+    .company-details .input-group:first-of-type { /* Target the first input group which should be company name */
+        display: none !important;
+    }
     .company-details .input-group { /* Each detail line */
-        margin-bottom: 2mm !important;
+        margin-bottom: 1.5mm !important; /* Tighter vertical spacing */
         display: block !important; /* Stack details */
     }
     .company-details input[readonly] {
@@ -686,9 +708,9 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
     /* 4. Line Between Customer Details and Company/Header Details */
     hr {
         position: absolute !important;
-        top: 70mm !important; /* Position below absolute header elements */
-        left: 12mm !important;
-        width: calc(100% - 24mm) !important; /* Full width minus page margins */
+        top: 90mm !important; /* Position below shifted header elements */
+        left: 10mm !important;
+        width: calc(100% - 20mm) !important; /* Full width minus page margins */
         height: 1px !important;
         background-color: #ddd !important;
         margin: 0 !important; /* Remove normal hr margins */
@@ -696,9 +718,9 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
 
     /* 5. Customer Details (left side, under the line, answers on right under line) */
     .customer-details {
-        margin-top: 80mm !important; /* Push down below absolute header and HR */
-        margin-left: 12mm !important; /* Align to left margin */
-        width: calc(100% - 24mm) !important; /* Full width for its content */
+        margin-top: 100mm !important; /* Push down below absolute header and HR */
+        margin-left: 10mm !important; /* Align to left margin */
+        width: calc(100% - 20mm) !important; /* Full width for its content */
         padding-bottom: 5mm !important; /* Reduced padding */
         position: relative !important; /* Ensure it starts normal flow after absolute elements */
     }
@@ -745,8 +767,8 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
         margin-right: auto !important;
     }
     .bill-items th, .bill-items td {
-        padding: 3mm 2mm !important; /* Even tighter cell padding */
-        font-size: 0.85em !important; /* Even smaller table text */
+        padding: 2.5mm 2mm !important; /* Even tighter cell padding */
+        font-size: 0.8em !important; /* Even smaller table text */
         border-color: #ddd !important; /* Ensure borders are visible */
         vertical-align: top !important; /* Align content to top of cell */
     }
@@ -763,12 +785,12 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
 
     /* 7. Bill Totals (already right-aligned) */
     .bill-totals {
-        margin-top: 10mm !important;
+        margin-top: 8mm !important; /* Reduced space after table */
         font-size: 1em !important;
-        line-height: 1.4 !important;
+        line-height: 1.3 !important; /* Tighter line height */
     }
     .bill-totals p {
-        margin-bottom: 2mm !important;
+        margin-bottom: 1.5mm !important; /* Tighter line spacing */
     }
     .bill-totals input[type="number"] {
         width: 25mm !important;
@@ -786,7 +808,7 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
 
     /* 8. Sign Space (bottom right corner) */
     .signature-section {
-        margin-top: 20mm !important; /* Adjust if table/totals are very long */
+        margin-top: 15mm !important; /* Adjust if table/totals are very long */
         padding-top: 5mm !important;
         border-top: 1px solid #eee !important;
         text-align: right !important;
@@ -809,12 +831,12 @@ body.dark-mode .checkbox-container:hover input ~ .checkmark {
     .actions {
         display: flex !important;
         justify-content: center !important; /* Center the 'Generate Bill' button */
-        margin-top: 15mm !important;
+        margin-top: 10mm !important; /* Reduced margin */
         gap: 0 !important;
     }
     .actions button {
-        padding: 8mm 15mm !important;
-        font-size: 1em !important;
+        padding: 7mm 12mm !important; /* Slightly smaller button padding */
+        font-size: 0.9em !important;
     }
 }
 
