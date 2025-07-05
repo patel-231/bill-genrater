@@ -1,598 +1,521 @@
-/* General Body and Container */
+/* General Body and Container Styles */
 body {
-    font-family: 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
-    background-color: #f2f5f9;
-    color: #333;
-    line-height: 1.6;
-    overflow-x: hidden;
-    transition: background-color 0.5s, color 0.5s;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top */
+    min-height: 100vh;
+    background-color: #f4f7f6; /* Light background */
+    color: #333; /* Default text color */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/* Dark Mode Styles */
-body.dark-mode {
-    background-color: #212121;
-    color: #e0e0e0;
-}
-
-body.dark-mode .container {
-    background-color: #2e2e2e;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    border: 1px solid #444;
-}
-
-body.dark-mode .bill-header h1,
-body.dark-mode .customer-details h2,
-body.dark-mode .bill-items h2 {
-    color: #ffffff;
-}
-
-body.dark-mode .company-details p,
-body.dark-mode .bill-info p,
-body.dark-mode .bill-info strong {
-    color: #b0b0b0;
-}
-
-body.dark-mode hr {
-    border-color: #444;
-}
-
-body.dark-mode .input-group label {
-    color: #c0c0c0;
-}
-
-body.dark-mode .input-group input[type="text"],
-body.dark-mode .input-group input[type="number"],
-body.dark-mode .input-group input[type="email"],
-body.dark-mode .input-group input[type="password"],
-body.dark-mode .input-group input[type="date"] {
-    background-color: #3a3a3a;
-    border-color: #555;
-    color: #e0e0e0;
-}
-/* Style for read-only inputs in dark mode */
-body.dark-mode .input-group input[readonly] {
-    background-color: #2a2a2a;
-    cursor: not-allowed;
-    opacity: 0.8;
-}
-body.dark-mode .company-details .checkbox-container input:disabled ~ .checkmark {
-    background-color: #444;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-body.dark-mode .company-details .checkbox-container input:disabled ~ .checkmark::after {
-    border-color: #777;
-}
-
-
-body.dark-mode .input-group input:focus {
-    border-color: #7ab8e2;
-    box-shadow: 0 0 0 3px rgba(122, 184, 226, 0.2);
-}
-
-body.dark-mode table {
-    background-color: #3a3a3a;
-}
-
-body.dark-mode table th,
-body.dark-mode table td {
-    border-color: #555;
-}
-
-body.dark-mode table th {
-    background-color: #4a4a4a;
-    color: #e0e0e0;
-}
-
-body.dark-mode .bill-items table input {
-    background-color: #4a4a4a;
-    border-color: #666;
-    color: #e0e0e0;
-}
-
-body.dark-mode .bill-totals p strong {
-    color: #ffffff;
-}
-
-body.dark-mode .bill-totals span {
-    color: #b0b0b0;
-}
-
-body.dark-mode .bill-totals input[type="number"] {
-    background-color: #3a3a3a;
-    border-color: #555;
-    color: #e0e0e0;
-}
-
-body.dark-mode #grand-total {
-    color: #8aff8a;
-}
-
-body.dark-mode .checkbox-container .checkmark::after {
-    border-color: #8aff8a;
-}
-body.dark-mode .signature-section p {
-    color: #e0e0e0;
-}
-body.dark-mode .signature-line {
-    border-color: #777;
-}
-
-
-/* 3D Background Canvas Styling */
+/* Three.js Background Canvas */
 #three-background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
-    display: block;
-    background-color: #1a2a3a;
-    transition: background-color 0.5s;
-}
-body.dark-mode #three-background {
-    background-color: #101010;
+    z-index: -1; /* Send to background */
 }
 
-
+/* Main Bill Container */
 .container {
-    position: relative;
-    z-index: 1;
     background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    max-width: 850px;
-    margin: 30px auto;
-    border: 1px solid #e0e6ec;
-    transition: background-color 0.5s, box-shadow 0.5s, border-color 0.5s;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px 40px;
+    margin: 40px 20px;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1; /* Ensure container is above background */
 }
 
-/* Header and Company Details */
-.bill-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e0e6ec;
-    transition: border-color 0.5s;
-}
-
-.bill-header h1 {
+/* Headings and HR */
+h1, h2 {
     color: #2c3e50;
-    margin: 0;
-    font-size: 2.2em;
-    font-weight: 600;
-    transition: color 0.5s;
+    margin-top: 0;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-.company-details {
-    width: 50%;
-    text-align: right;
-}
-.company-details .input-group {
-    margin-bottom: 8px;
-}
-.company-details .input-group label {
-    display: inline-block;
-    width: 80px;
-    text-align: right;
-    margin-right: 10px;
-    font-weight: normal;
-    color: #666;
-    font-size: 0.9em;
-}
-.company-details .input-group input {
-    width: calc(100% - 100px);
-    padding: 8px;
-    font-size: 0.9em;
-    display: inline-block;
-    vertical-align: middle;
-}
-.input-group input[readonly] {
-    background-color: #e9ecef;
-    cursor: not-allowed;
-    border-color: #ced4da;
-    opacity: 0.9;
-}
-
-.company-details .checkbox-container {
-    padding-left: 25px;
-    font-size: 0.85em;
-    margin-top: 5px;
-    color: #555;
-}
-.company-details .checkbox-container input:disabled {
-    cursor: not-allowed;
-}
-.company-details .checkbox-container input:disabled ~ .checkmark {
-    background-color: #d0d0d0;
-    cursor: not-allowed;
-}
-.company-details .checkbox-container input:disabled ~ .checkmark::after {
-    border-color: #a0a0a0;
-}
-
-
-.bill-info {
-    text-align: right;
-}
-
-.bill-info strong {
-    color: #2c3e50;
-    transition: color 0.5s;
-}
-
-/* Separator Line */
 hr {
     border: 0;
-    border-top: 1px solid #e0e6ec;
-    margin: 25px 0;
-    transition: border-color 0.5s;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 20px 0;
+    transition: background-color 0.3s ease;
 }
 
-/* Sections (Customer Details, Items, Totals) */
-.customer-details, .bill-items, .bill-totals, .signature-section {
-    margin-bottom: 30px;
-}
-
-.customer-details h2, .bill-items h2 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-size: 1.6em;
-    border-bottom: 1px solid #f0f4f7;
-    padding-bottom: 8px;
-    transition: color 0.5s, border-color 0.5s;
-}
-
-/* Input Fields */
+/* Input Group Styling */
 .input-group {
     margin-bottom: 15px;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #444;
-    transition: color 0.5s;
+    margin-bottom: 5px;
+    font-weight: 500;
 }
 
 .input-group input[type="text"],
 .input-group input[type="number"],
 .input-group input[type="email"],
-.input-group input[type="password"],
-.input-group input[type="date"],
-.bill-info input[type="text"],
-.bill-info input[type="date"]
-{
-    width: calc(100% - 20px);
-    padding: 12px;
-    border: 1px solid #d0dbe4;
-    border-radius: 6px;
+.input-group input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     box-sizing: border-box;
-    font-size: 1em;
-    transition: border-color 0.3s, box-shadow 0.3s, background-color 0.5s, color 0.5s;
+    font-size: 16px;
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
-
-.bill-info input[type="text"],
-.bill-info input[type="date"] {
-    width: 150px;
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 10px;
-}
-.bill-info p {
-    margin: 10px 0;
-}
-.bill-info strong {
-    min-width: 80px;
-    display: inline-block;
-}
-
 
 .input-group input[type="text"]:focus,
 .input-group input[type="number"]:focus,
 .input-group input[type="email"]:focus,
-.input-group input[type="password"]:focus,
-.input-group input[type="date"]:focus,
-.bill-info input[type="text"]:focus,
-.bill-info input[type="date"]:focus {
-    border-color: #5a7d9a;
-    box-shadow: 0 0 0 3px rgba(90, 125, 154, 0.2);
+.input-group input[type="date"]:focus {
+    border-color: #007bff;
     outline: none;
 }
 
-/* Table Styling */
-table {
-    width: 100%;
-    border-collapse: collapse;
+/* Specific Section Styles */
+.bill-header {
+    text-align: center;
     margin-bottom: 20px;
-    background-color: #fcfdff;
-    transition: background-color 0.5s;
 }
 
-table th, table td {
-    border: 1px solid #e0e6ec;
-    padding: 12px 15px;
+.bill-header h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    color: #007bff; /* Accent color for main heading */
+}
+
+.company-details {
     text-align: left;
+    margin-top: 20px;
+}
+
+.company-details .input-group {
+    margin-bottom: 5px; /* Tighter spacing for company details */
+}
+
+/* Make company details inputs less prominent and read-only looking */
+.company-details input[readonly] {
+    border: none;
+    background-color: transparent;
+    padding: 0;
     font-size: 0.95em;
-    transition: border-color 0.5s;
+    font-weight: 400;
+    color: #555;
+    cursor: default;
 }
 
-table th {
-    background-color: #eef3f7;
-    font-weight: 700;
-    color: #444;
-    transition: background-color 0.5s, color 0.5s;
+.company-details input[readonly]:focus {
+    outline: none;
 }
 
-.bill-items table input[type="text"],
-.bill-items table input[type="number"] {
-    width: 90%;
+.bill-info p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.bill-info input {
+    width: 150px;
     padding: 8px;
-    border: 1px solid #d0dbe4;
+    border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 0.9em;
-    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 }
 
-.bill-items table td:last-child {
-    text-align: center;
-    width: 50px;
+.customer-details {
+    margin-top: 20px;
 }
 
-/* Buttons */
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+/* NEW: Customer Details Layout (label on left, input on right) */
+.customer-details .input-group {
+    display: flex; /* Use flexbox to put label and input on same line */
+    align-items: center; /* Vertically align items */
+    margin-bottom: 8px; /* Spacing between rows */
+    gap: 10px; /* Space between label and input */
 }
 
-button:hover {
-    background-color: #45a049;
-    transform: translateY(-2px);
+.customer-details .input-group label {
+    flex-shrink: 0; /* Prevent label from shrinking */
+    width: 120px; /* Give labels a fixed width for alignment */
+    text-align: right; /* Align label text to the right */
+    font-weight: normal; /* Labels within input-group are usually not bold */
+    margin-bottom: 0; /* Override default margin-bottom from .input-group label */
 }
 
-#add-item {
-    background-color: #007bff;
-    padding: 10px 20px;
-    font-size: 0.95em;
+.customer-details .input-group input {
+    flex-grow: 1; /* Allow input to take remaining space */
+    max-width: calc(100% - 130px); /* Adjust max-width based on label width and gap */
 }
 
-#add-item:hover {
-    background-color: #0056b3;
+/* Adjust the customer details container to align its inner elements */
+.customer-details {
+    padding-bottom: 15px; /* Add some padding at the bottom */
 }
 
-.delete-item-btn {
+
+.bill-items table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.bill-items th,
+.bill-items td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.bill-items th {
+    background-color: #f8f8f8;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.bill-items td input {
+    width: calc(100% - 10px); /* Adjust for padding */
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+    background-color: #fff;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.bill-items td input:focus {
+    border-color: #007bff;
+}
+
+.bill-items .item-total {
+    font-weight: 500;
+}
+
+.bill-items .delete-item-btn {
     background-color: #dc3545;
     color: white;
     border: none;
-    padding: 6px 12px;
     border-radius: 4px;
+    padding: 6px 10px;
     cursor: pointer;
     font-size: 0.8em;
-    box-shadow: none;
+    transition: background-color 0.2s ease;
 }
 
-.delete-item-btn:hover {
+.bill-items .delete-item-btn:hover {
     background-color: #c82333;
-    transform: none;
+}
+
+#add-item {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-top: 15px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+#add-item:hover {
+    background-color: #218838;
+}
+
+.bill-totals {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+.bill-totals p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.bill-totals input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+    text-align: right;
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.signature-section {
+    margin-top: 50px;
+    text-align: right;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.signature-line {
+    width: 200px;
+    height: 1px;
+    background-color: #333;
+    margin: 10px 0 0 auto;
+    transition: background-color 0.3s ease;
 }
 
 .actions {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .actions button {
-    background-color: #28a745;
-    margin: 0 15px;
-    padding: 15px 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 25px;
+    margin: 0 10px;
+    cursor: pointer;
     font-size: 1.1em;
+    transition: background-color 0.2s ease;
 }
 
-.actions button#reset-form {
+.actions button:hover {
+    background-color: #0056b3;
+}
+
+#reset-form {
     background-color: #6c757d;
 }
 
-.actions button#reset-form:hover {
+#reset-form:hover {
     background-color: #5a6268;
 }
 
-/* Bill Totals */
-.bill-totals {
-    text-align: right;
-    font-size: 1.15em;
-    margin-top: 30px;
-    padding-top: 15px;
-    border-top: 2px solid #e0e6ec;
-    transition: border-color 0.5s;
+/* --- Dark Mode Styles --- */
+body.dark-mode {
+    background-color: #2c2c2c; /* Dark background for body */
+    color: #e0e0e0; /* Light text color */
 }
 
-.bill-totals p {
-    margin: 10px 0;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+body.dark-mode .container {
+    background-color: #3e3e3e; /* Darker container background */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.bill-totals p strong {
-    min-width: 120px;
-    text-align: right;
-    margin-right: 10px;
-    color: #2c3e50;
-    transition: color 0.5s;
+body.dark-mode h1,
+body.dark-mode h2 {
+    color: #87ceeb; /* Lighter accent for headings */
 }
 
-.bill-totals span {
-    min-width: 80px;
-    text-align: right;
-    display: inline-block;
-    color: #555;
-    transition: color 0.5s;
+body.dark-mode hr {
+    background-color: #555;
 }
 
-.bill-totals input[type="number"] {
-    width: 70px;
-    text-align: right;
-    padding: 8px;
-    border: 1px solid #d0dbe4;
-    border-radius: 4px;
-    font-size: 1em;
-    margin-left: 10px;
-    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+body.dark-mode .input-group input[type="text"],
+body.dark-mode .input-group input[type="number"],
+body.dark-mode .input-group input[type="email"],
+body.dark-mode .input-group input[type="date"],
+body.dark-mode .bill-items td input {
+    background-color: #4a4a4a;
+    border-color: #666;
+    color: #e0e0e0;
 }
 
-#grand-total {
-    font-size: 1.4em;
-    font-weight: 700;
-    color: #28a745;
-    transition: color 0.5s;
+body.dark-mode .input-group input[type="text"]:focus,
+body.dark-mode .input-group input[type="number"]:focus,
+body.dark-mode .input-group input[type="email"]:focus,
+body.dark-mode .input-group input[type="date"]:focus,
+body.dark-mode .bill-items td input:focus {
+    border-color: #87ceeb;
 }
 
+body.dark-mode .company-details input[readonly] {
+    color: #bbb; /* Lighter color for read-only text in dark mode */
+}
 
-/* --- Modal Specific Styles (for Sign-In Modal) --- */
-.modal {
-    display: none;
+body.dark-mode .bill-items th {
+    background-color: #4a4a4a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .bill-items td {
+    border-color: #555;
+}
+
+body.dark-mode .signature-line {
+    background-color: #e0e0e0;
+}
+
+/* Control Panel */
+.app-controls {
     position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+
+.app-controls.hidden {
+    transform: translateX(calc(100% + 20px)); /* Hide by moving off-screen */
+}
+
+.control-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.control-button:hover {
+    background-color: #0056b3;
+}
+
+/* Modals */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(5px);
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
 
 .modal-content {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    background-color: #fefefe;
+    margin: auto;
+    padding: 25px 35px;
+    border-radius: 8px;
     width: 90%;
     max-width: 500px;
-    animation: fadeInScale 0.3s ease-out;
-    transition: background-color 0.5s, box-shadow 0.5s;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .modal-content {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
 }
 
 .modal-content h2 {
     text-align: center;
-    color: #2c3e50;
     margin-bottom: 20px;
-    font-size: 1.8em;
-    transition: color 0.5s;
+    color: #2c3e50;
 }
 
-.modal-content p {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #666;
-    transition: color 0.5s;
+body.dark-mode .modal-content h2 {
+    color: #87ceeb;
 }
 
 .modal-content .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.modal-content input {
-    width: calc(100% - 20px);
-    padding: 12px;
-    border: 1px solid #d0dbe4;
-    border-radius: 6px;
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
     font-size: 1em;
 }
 
-.modal-content button#saveCompanyDetailsBtn,
-.modal-content button#signInBtn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin-top: 25px;
-    background-color: #007bff;
-    font-size: 1.1em;
+body.dark-mode .modal-content input {
+    background-color: #4a4a4a;
+    border-color: #666;
+    color: #e0e0e0;
 }
 
-.modal-content button#saveCompanyDetailsBtn:hover,
-.modal-content button#signInBtn:hover {
+.modal-content button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.modal-content button:hover {
     background-color: #0056b3;
 }
 
 .modal-close-btn {
-    background-color: #6c757d;
-    margin-top: 10px;
-    width: 100%;
-    padding: 12px;
-    font-size: 1em;
-}
-.modal-close-btn:hover {
-    background-color: #5a6268;
-}
-
-/* Modal Animation */
-@keyframes fadeInScale {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-/* App Control Buttons */
-.app-controls {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 20px;
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.control-button {
-    background-color: #5a7d9a;
-    color: white;
-    padding: 8px 15px;
-    font-size: 0.9em;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+body.dark-mode .modal-close-btn {
+    color: #ccc;
 }
 
-.control-button:hover {
-    background-color: #4e6a82;
-    transform: translateY(-1px);
+body.dark-mode .modal-close-btn:hover,
+body.dark-mode .modal-close-btn:focus {
+    color: #fff;
 }
 
-/* Checkbox for Show/Hide GST */
+/* Checkbox container for 'Show GST' options */
 .checkbox-container {
     display: block;
     position: relative;
     padding-left: 25px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 1em;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    color: #555;
-    transition: color 0.5s;
 }
 
+/* Hide the browser's default checkbox */
 .checkbox-container input {
     position: absolute;
     opacity: 0;
@@ -601,38 +524,52 @@ button:hover {
     width: 0;
 }
 
+/* Create a custom checkbox */
 .checkmark {
     position: absolute;
     top: 0;
     left: 0;
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     background-color: #eee;
     border-radius: 3px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
+body.dark-mode .checkmark {
+    background-color: #555;
+}
+
+/* On mouse-over, add a grey background color */
 .checkbox-container:hover input ~ .checkmark {
     background-color: #ccc;
 }
 
-.checkbox-container input:checked ~ .checkmark {
-    background-color: #28a745;
+body.dark-mode .checkbox-container:hover input ~ .checkmark {
+    background-color: #666;
 }
 
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: #007bff;
+}
+
+/* Create the checkmark (indicator) when checked */
 .checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
+/* Show the checkmark when checked */
 .checkbox-container input:checked ~ .checkmark:after {
     display: block;
 }
 
+/* Style the checkmark/indicator */
 .checkbox-container .checkmark:after {
-    left: 6px;
-    top: 2px;
+    left: 7px;
+    top: 3px;
     width: 5px;
     height: 10px;
     border: solid white;
@@ -642,297 +579,167 @@ button:hover {
     transform: rotate(45deg);
 }
 
-/* Signature Section */
-.signature-section {
-    text-align: right;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #e0e6ec;
-}
 
-.signature-section p {
-    margin: 5px 0;
-    font-size: 0.95em;
-    color: #555;
-}
-
-.signature-section p:first-child {
-    font-weight: 600;
-    color: #333;
-}
-
-.signature-line {
-    width: 200px;
-    height: 1px;
-    background-color: #888;
-    margin: 20px 0 5px auto;
-}
-
-/* Print styles - Adjusted for new look */
+/* --- Print-Specific Styles (For PDF generation) --- */
 @media print {
-    /* General print setup */
-    @page {
-        size: A4;
-        margin: 0.1cm;
+    /* 1. Force Light Mode for Print */
+    body, body.dark-mode {
+        background-color: white !important;
+        color: black !important;
+        /* Ensure all text is black */
     }
-    html, body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        font-size: 9pt;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-    body {
-        background-color: #fff !important;
-        color: #000 !important;
-    }
-    #three-background {
-        display: none !important;
-    }
+    body.dark-mode .container,
     .container {
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        margin: 0 !important;
-        max-width: none !important;
-        padding: 5mm 8mm !important;
-        border: none !important;
-        display: block !important;
+        background-color: white !important;
+        color: black !important;
+        border: none !important; /* Remove border in print */
+        box-shadow: none !important; /* Remove shadow in print */
     }
-    /* HIDE ALL INTERACTIVE ELEMENTS */
-    .actions,
-    .app-controls,
-    .delete-item-btn, /* <--- THIS IS THE NEW LINE */
-    .modal,
-    .bill-totals input[type="number"],
-    .company-details .input-group label,
-    .company-details .checkbox-container
-    {
+    h1, h2,
+    body.dark-mode h1, body.dark-mode h2 {
+        color: black !important; /* Ensure headings are black */
+    }
+    hr, body.dark-mode hr {
+        background-color: #ccc !important; /* Lighter hr for print */
+    }
+
+    /* Ensure specific text colors are black in print */
+    .bill-header h1,
+    .customer-details h2,
+    .bill-items h2,
+    .bill-totals p strong,
+    table th,
+    table td {
+        color: black !important;
+    }
+
+    /* Input fields should appear as plain text in print */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="date"],
+    .bill-items td input {
+        border: none !important; /* No border for inputs */
+        background-color: transparent !important; /* Transparent background */
+        padding: 2px 0 !important;
+        width: auto !important; /* Adjust width as needed for content */
+        display: inline-block !important; /* Allow labels to be next to them */
+        color: black !important; /* Ensure text is black */
+    }
+
+    /* Specifically target customer and bill info inputs for a dashed underline in print */
+    .customer-details .input-group input,
+    .bill-info input {
+        border-bottom: 1px dashed #ccc !important; /* Subtle line for input areas */
+        min-width: 150px; /* Ensure enough space for content */
+    }
+
+    /* Specific adjustments for read-only inputs in print mode */
+    .company-details .input-group input[readonly],
+    .customer-details .input-group input[readonly] {
+        background-color: transparent !important;
+        border: none !important;
+        cursor: default !important;
+        padding: 0 !important; /* Remove padding for a more text-like appearance */
+        color: black !important;
+        font-weight: 400 !important;
+    }
+
+    /* 2. Hide "Add Item" button and individual delete buttons */
+    #add-item,
+    .delete-item-btn {
         display: none !important;
     }
 
+    /* Hide the Reset Form button as it's not needed in PDF */
+    #reset-form {
+        display: none !important;
+    }
 
-    /* Show specific content that comes from inputs as static text */
-    .customer-details input[type="text"],
-    .customer-details input[type="email"],
-    .customer-details input[type="number"],
-    .bill-info input[type="text"],
-    .bill-info input[type="date"] {
-        display: inline-block !important;
-        border: none !important;
+    /* Hide other UI elements not needed in print */
+    #control-panel,
+    #three-background,
+    .modal {
+        display: none !important;
+    }
+
+    /* Adjust layout of actions section if buttons are hidden */
+    .actions {
+        display: flex; /* Use flexbox to center/space buttons */
+        justify-content: center; /* Center the remaining "Generate Bill" button */
+        gap: 0; /* No gap needed if only one button left */
+    }
+    /* Ensure no margins/paddings from hidden elements affect layout */
+    .container {
+        margin: 0 auto !important; /* Center on page */
+        box-shadow: none !important; /* Remove shadow */
+        border: none !important; /* Remove border */
+    }
+    /* Remove padding/margin from body to use full page */
+    body {
         padding: 0 !important;
-        width: auto !important;
-        font-size: 0.95em !important;
-        background-color: transparent !important;
-        color: #000 !important;
-        vertical-align: middle;
-        margin-left: 0 !important;
-        box-shadow: none !important;
-    }
-    /* Company details inputs should also appear as text */
-    .company-details input[type="text"],
-    .company-details input[type="email"],
-    .company-details input[type="number"] {
+        margin: 0 !important;
+        /* Ensure that the content fills the page more */
         display: block !important;
-        border: none !important;
-        padding: 0 !important;
-        width: auto !important;
-        font-size: 0.8em !important;
-        background-color: transparent !important;
-        color: #000 !important;
-        margin-left: auto !important;
-        text-align: right !important;
-        box-shadow: none !important;
+        min-height: auto !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
     }
-    #company-gst-input {
-        display: block !important;
+    /* Ensure table borders are visible */
+    table, th, td {
+        border-color: #ddd !important;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px 10px;
+        padding: 20px;
     }
 
+    .bill-header h1 {
+        font-size: 2.5em;
+    }
 
-    /* Specific adjustment for bill-info labels and values for print */
-    .bill-info {
-        padding-top: 2mm !important;
-        margin-bottom: 5mm !important;
+    .actions button {
+        padding: 10px 15px;
+        font-size: 1em;
+        margin: 5px;
     }
-    .bill-info p {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        margin: 1px 0 !important;
-        font-size: 0.8em !important;
+    .bill-totals p, .bill-info p {
+        font-size: 1em;
     }
-    .bill-info strong {
-        min-width: 55px !important;
+    .customer-details .input-group {
+        flex-direction: column; /* Stack label and input on small screens */
+        align-items: flex-start;
+    }
+    .customer-details .input-group label {
+        width: auto; /* Remove fixed width */
         text-align: left;
-        margin-right: 3px !important;
+        margin-right: 0;
+        margin-bottom: 5px; /* Add space below label */
     }
-    .bill-info input[type="text"],
-    .bill-info input[type="date"] {
-        width: 90px !important;
-        font-size: 0.8em !important;
+    .customer-details .input-group input {
+        max-width: 100%; /* Allow input to take full width */
     }
+}
 
-
-    /* Print Specific Table Styling */
-    .bill-items {
-        margin-bottom: 8mm !important;
-    }
-    .bill-items h2 {
-        margin-bottom: 5mm !important;
-        font-size: 1em !important;
-        padding-bottom: 2px !important;
-    }
-    table {
-        background-color: #fff !important;
-        width: 100% !important;
-        margin-bottom: 8mm !important;
-        font-size: 0.75em !important;
-    }
-    table th, table td {
-        border: 1px solid #ccc !important;
-        padding: 3mm 4mm !important;
-        vertical-align: top;
-    }
-    table th {
-        background-color: #f0f0f0 !important;
-        font-weight: bold !important;
-        color: #333 !important;
-    }
-    .bill-items table input {
-        border: none !important;
-        padding: 0 !important;
-        width: auto !important;
-        font-size: 1em !important;
-        color: #000 !important;
-        background-color: transparent !important;
-    }
-    /* Make description column flexible, others fixed */
-    .bill-items table th:nth-child(1),
-    .bill-items table td:nth-child(1) {
-        width: 55% !important;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-    .bill-items table th:nth-child(2),
-    .bill-items table td:nth-child(2) {
-        width: 12% !important;
-    }
-    .bill-items table th:nth-child(3),
-    .bill-items table td:nth-child(3) {
-        width: 13% !important;
-    }
-    .bill-items table th:nth-child(4),
-    .bill-items table td:nth-child(4) {
-        width: 20% !important;
-    }
-    .item-total {
-        font-weight: bold !important;
-    }
-
-    /* Print Specific Totals Styling */
-    .bill-totals {
-        font-size: 0.8em !important;
-        padding-top: 5mm !important;
-        border-top: 1px solid #bbb !important;
-        margin-top: 8mm !important;
-    }
-    .bill-totals p {
-        justify-content: flex-end;
-        margin: 1px 0 !important;
-    }
-    .bill-totals p strong {
-        color: #000 !important;
-        min-width: 70px !important;
-        margin-right: 3px !important;
-    }
-    .bill-totals span {
-        color: #000 !important;
-        min-width: 45px !important;
-    }
-    #grand-total {
-        font-size: 1.05em !important;
-        font-weight: 900 !important;
-        color: #000 !important;
-    }
-    #tax-amount, #discount-amount {
-        display: inline-block !important;
-        min-width: auto !important;
-        text-align: right !important;
-        margin-left: 3px !important;
-    }
-    .bill-totals p:has(input[type="number"]) {
-        display: flex !important;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    /* Customer GST in Print */
-    .customer-details #customer-gst {
-        display: inline-block !important;
-        border: none !important;
-        padding: 0 !important;
-        width: auto !important;
-        color: #000 !important;
-        background-color: transparent !important;
-        font-size: 0.95em !important;
-        vertical-align: middle;
-    }
-    .customer-details .input-group label[for="customer-gst"] {
-        display: inline-block !important;
-        margin-right: 3px;
-        font-size: 0.95em !important;
-        font-weight: normal !important;
-        color: #000 !important;
-    }
-
-
-    /* Signature Section Print Styles */
-    .signature-section {
-        text-align: right !important;
-        margin-top: 10mm !important;
-        padding-top: 5mm !important;
-        border-top: 1px solid #bbb !important;
-    }
-    .signature-section p {
-        color: #000 !important;
-        margin: 0.5mm 0 !important;
-        font-size: 0.8em !important;
-    }
-    .signature-section p:first-child {
-        color: #000 !important;
-        font-weight: bold !important;
-    }
-    .signature-line {
-        background-color: #000 !important;
-        width: 120px !important;
-        margin: 6mm 0 1mm auto !important;
-    }
-
-    /* Reduce spacing between sections */
-    .bill-header, .customer-details, .bill-items, .bill-totals {
-        margin-bottom: 5mm !important;
-    }
-    hr {
-        border-top: 0.5px solid #ddd !important;
-        margin: 5mm 0 !important;
+@media (max-width: 480px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
     }
     .bill-header h1 {
-        font-size: 1.4em !important;
+        font-size: 2em;
     }
-    .customer-details h2 {
-        margin-bottom: 4mm !important;
+    .bill-items th, .bill-items td {
+        padding: 8px;
+        font-size: 0.9em;
     }
-
-    /* Optional: Aggressive global scaling if content still overflows */
-    /*
-    body {
-        transform: scale(0.85);
-        transform-origin: top left;
-        width: calc(100% / 0.85);
-        height: calc(100% / 0.85);
-        overflow: hidden;
+    .actions button {
+        display: block;
+        width: calc(100% - 20px);
+        margin: 10px auto;
     }
-    */
 }

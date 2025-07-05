@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const companyAddressDisplay = document.getElementById('company-address');
     const companyPhoneDisplay = document.getElementById('company-phone');
     const companyEmailDisplay = document.getElementById('company-email');
-    const companyGstDisplay = document.getElementById('company-gst');
+    const companyGstDisplay = document.getElementById('company-gst'); // Your primary company GST
 
     // Company details modal fields (these are editable)
     const modalCompanyNameInput = document.getElementById('modal-company-name');
@@ -25,13 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalCompanyGstInput = document.getElementById('modal-company-gst');
     const showCompanyGstCheckbox = document.getElementById('show-company-gst');
 
-    // Customer details fields
+    // Customer details fields (note: customer-gst is now company-gst in customer section)
     const customerNameInput = document.getElementById('customer-name');
     const customerAddressInput = document.getElementById('customer-address');
     const customerPhoneInput = document.getElementById('customer-phone');
     const customerEmailInput = document.getElementById('customer-email');
-    const customerGstInput = document.getElementById('customer-gst');
-    const showCustomerGstCheckbox = document.getElementById('show-customer-gst');
+    const customerGstInput = document.getElementById('customer-gst'); // This is now your company's GST for this section
 
     // Bill info fields
     const billNumberInput = document.getElementById('bill-number');
@@ -56,25 +55,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const togglePanelBtn = document.getElementById('toggle-panel');
     const controlPanel = document.getElementById('control-panel');
     const showCompanyDetailsModalBtn = document.getElementById('showCompanyDetailsModal');
-    const loginStatusButton = document.getElementById('login-status-button'); // This button dynamically shows "Login" or "Logout"
+    const loginStatusButton = document.getElementById('login-status-button');
 
     // Company Details Modal elements
     const companyDetailsModal = document.getElementById('companyDetailsModal');
     const closeCompanyDetailsModal = companyDetailsModal.querySelector('.modal-close-btn');
     const saveCompanyDetailsBtn = document.getElementById('saveCompanyDetailsBtn');
-    const clearCompanyDetailsBtn = document.getElementById('clearCompanyDetailsBtn'); // NEW
+    const clearCompanyDetailsBtn = document.getElementById('clearCompanyDetailsBtn');
 
     // Sign-In/Sign-Up Modal elements
     const signInModal = document.getElementById('signInModal');
     const closeSignInModal = signInModal.querySelector('.modal-close-btn');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-    const signInBtn = document.getElementById('signInBtn'); // Main button inside sign-in modal
-    const toggleSignInSignUpBtn = document.getElementById('toggleSignInSignUp'); // Button to switch modes
+    const signInBtn = document.getElementById('signInBtn');
+    const toggleSignInSignUpBtn = document.getElementById('toggleSignInSignUp');
     const signInSignUpTitle = document.getElementById('signInSignUpTitle');
     const authMessage = document.getElementById('authMessage');
 
-    let isSignUpMode = false; // To track if the modal is in Sign Up mode
+    let isSignUpMode = false;
 
     // --- Local Storage Keys ---
     const LOCAL_STORAGE_COMPANY_DETAILS = 'billGeneratorCompanyDetails';
@@ -88,12 +87,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadCompanyDetails = () => {
         const storedDetails = JSON.parse(localStorage.getItem(LOCAL_STORAGE_COMPANY_DETAILS));
         if (storedDetails) {
-            // Update display fields (readonly)
+            // Update display fields (readonly in main bill view)
             companyNameDisplay.value = storedDetails.name || '';
             companyAddressDisplay.value = storedDetails.address || '';
             companyPhoneDisplay.value = storedDetails.phone || '';
             companyEmailDisplay.value = storedDetails.email || '';
-            companyGstDisplay.value = storedDetails.gst || '';
+            companyGstDisplay.value = storedDetails.gst || ''; // Primary company GST
+
+            // Update the 'Company GST' field in the customer details section
+            customerGstInput.value = storedDetails.gst || ''; // Now populating this with company GST
+            customerGstInput.readOnly = true; // Ensure it's read-only
 
             // Update modal fields (editable)
             modalCompanyNameInput.value = storedDetails.name || '';
@@ -101,19 +104,27 @@ document.addEventListener('DOMContentLoaded', () => {
             modalCompanyPhoneInput.value = storedDetails.phone || '';
             modalCompanyEmailInput.value = storedDetails.email || '';
             modalCompanyGstInput.value = storedDetails.gst || '';
-            showCompanyGstCheckbox.checked = storedDetails.showGst !== false; // Default to true if not set
+            showCompanyGstCheckbox.checked = storedDetails.showGst !== false;
             toggleCompanyGstVisibility();
         } else {
-             // Clear modal inputs if no details are stored
+            // Clear all company-related fields if no details are stored
+            companyNameDisplay.value = '';
+            companyAddressDisplay.value = '';
+            companyPhoneDisplay.value = '';
+            companyEmailDisplay.value = '';
+            companyGstDisplay.value = '';
+            customerGstInput.value = ''; // Also clear the company GST in customer section
+
+            // Clear modal inputs
             modalCompanyNameInput.value = '';
             modalCompanyAddressInput.value = '';
             modalCompanyPhoneInput.value = '';
             modalCompanyEmailInput.value = '';
             modalCompanyGstInput.value = '';
-            showCompanyGstCheckbox.checked = true; // Default checkbox to checked
+            showCompanyGstCheckbox.checked = true;
             toggleCompanyGstVisibility();
         }
-        // Set editability based on login status right after loading
+        // Set editability of main company details based on login status
         setCompanyDetailsEditability(isLoggedIn());
     };
 
@@ -123,11 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
         companyDetailInputs.forEach(input => {
             input.readOnly = !editable;
             if (editable) {
-                input.style.backgroundColor = ''; // Reset background if it was changed
+                input.style.backgroundColor = '';
                 input.style.cursor = '';
                 input.title = 'Editable';
             } else {
-                input.style.backgroundColor = '#e9ecef'; // Grey out if not editable
+                input.style.backgroundColor = '#e9ecef';
                 input.style.cursor = 'not-allowed';
                 input.title = 'Login to edit company details';
             }
@@ -154,14 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Authentication Functions (Local Storage Backend Simulation) ---
-
-    // A very basic (insecure) "hashing" for demonstration
     const simpleHash = (str) => {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
             hash = ((hash << 5) - hash) + char;
-            hash |= 0; // Convert to 32bit integer
+            hash |= 0;
         }
         return hash.toString();
     };
@@ -192,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         usernameInput.value = '';
         passwordInput.value = '';
         isSignUpMode = false;
-        updateSignInSignUpModal(); // Update modal UI to sign-in mode
+        updateSignInSignUpModal();
     };
 
     const signInUser = () => {
@@ -214,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 signInModal.style.display = 'none';
                 updateLoginStatusButton();
-                setCompanyDetailsEditability(true); // Make company details editable on login
+                setCompanyDetailsEditability(true);
             }, 1000);
             usernameInput.value = '';
             passwordInput.value = '';
@@ -227,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutUser = () => {
         localStorage.removeItem(LOCAL_STORAGE_LOGGED_IN_USER);
         updateLoginStatusButton();
-        setCompanyDetailsEditability(false); // Make company details readonly on logout
+        setCompanyDetailsEditability(false);
         alert('You have been logged out.');
     };
 
@@ -239,28 +248,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return localStorage.getItem(LOCAL_STORAGE_LOGGED_IN_USER);
     };
 
-    // Update the text and behavior of the Login/Logout button
     const updateLoginStatusButton = () => {
         if (isLoggedIn()) {
             loginStatusButton.textContent = `Logout (${getLoggedInUser()})`;
-            loginStatusButton.removeEventListener('click', openSignInModalForLogin); // Remove specific listener
-            loginStatusButton.addEventListener('click', logoutUser); // Add logout listener
+            loginStatusButton.removeEventListener('click', openSignInModalForLogin);
+            loginStatusButton.addEventListener('click', logoutUser);
         } else {
             loginStatusButton.textContent = 'Login';
-            loginStatusButton.removeEventListener('click', logoutUser); // Remove logout listener
-            loginStatusButton.addEventListener('click', openSignInModalForLogin); // Add login listener
+            loginStatusButton.removeEventListener('click', logoutUser);
+            loginStatusButton.addEventListener('click', openSignInModalForLogin);
         }
     };
 
-    // Helper to open sign-in modal in login mode
     const openSignInModalForLogin = () => {
-        isSignUpMode = false; // Ensure it opens in sign-in mode
+        isSignUpMode = false;
         updateSignInSignUpModal();
         signInModal.style.display = 'flex';
-        authMessage.textContent = ''; // Clear previous messages
+        authMessage.textContent = '';
     };
 
-    // Update the modal's UI based on sign-up/sign-in mode
     const updateSignInSignUpModal = () => {
         if (isSignUpMode) {
             signInSignUpTitle.textContent = 'Sign Up';
@@ -271,12 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
             signInBtn.textContent = 'Login';
             toggleSignInSignUpBtn.textContent = 'Don\'t have an account? Sign Up';
         }
-        authMessage.textContent = ''; // Clear messages when switching mode
-        usernameInput.value = ''; // Clear inputs
+        authMessage.textContent = '';
+        usernameInput.value = '';
         passwordInput.value = '';
     };
 
-    // Handle authentication action (sign in or register) based on current mode
     const handleAuthAction = () => {
         if (isSignUpMode) {
             registerUser();
@@ -324,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         billItemsBody.appendChild(newRow);
 
-        // Add event listeners for new inputs
         const quantityInput = newRow.querySelector('.item-quantity');
         const priceInput = newRow.querySelector('.item-price');
         const deleteButton = newRow.querySelector('.delete-item-btn');
@@ -336,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             calculateTotal();
         });
 
-        calculateTotal(); // Recalculate totals after adding a new item
+        calculateTotal();
     };
 
     const generateBill = () => {
@@ -344,19 +348,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const resetForm = () => {
-        if (confirm('Are you sure you want to reset the entire bill? This will not clear saved company details.')) {
-            // Clear customer details
+        if (confirm('Are you sure you want to reset the entire bill? This will not clear saved company details or your login status.')) {
+            // Clear customer details (except customerGstInput which is now company GST)
             customerNameInput.value = '';
             customerAddressInput.value = '';
             customerPhoneInput.value = '';
             customerEmailInput.value = '';
-            customerGstInput.value = '';
-            showCustomerGstCheckbox.checked = true; // Reset customer GST visibility
-            toggleCustomerGstVisibility();
 
-            // Clear bill info
-            billNumberInput.value = '001'; // Reset bill number
-            initializeBillDate(); // Re-initialize date
+            // Reset bill info
+            billNumberInput.value = '001';
+            initializeBillDate();
 
             // Clear all bill items and add one empty item
             billItemsBody.innerHTML = '';
@@ -366,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
             taxRateInput.value = '0';
             discountRateInput.value = '0';
 
-            calculateTotal(); // Recalculate everything
+            calculateTotal();
         }
     };
 
@@ -387,8 +388,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         localStorage.setItem(LOCAL_STORAGE_COMPANY_DETAILS, JSON.stringify(companyDetails));
         alert('Company details saved successfully!');
-        companyDetailsModal.style.display = 'none'; // Close modal after saving
-        loadCompanyDetails(); // Reload to update main display fields
+        companyDetailsModal.style.display = 'none';
+        loadCompanyDetails(); // Reload to update main display fields, including customerGstInput
     };
 
     const clearCompanyDetails = () => {
@@ -396,14 +397,13 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please login to clear company details.');
             return;
         }
-        if (confirm('Are you sure you want to clear ALL saved company details?')) {
+        if (confirm('Are you sure you want to clear ALL saved company details? This cannot be undone.')) {
             localStorage.removeItem(LOCAL_STORAGE_COMPANY_DETAILS);
             alert('Company details cleared.');
             companyDetailsModal.style.display = 'none';
             loadCompanyDetails(); // Reload to update display fields (will show empty)
         }
     };
-
 
     // Toggle visibility of Company GST input in the modal
     const toggleCompanyGstVisibility = () => {
@@ -415,43 +415,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Toggle visibility of Customer GST input
-    const toggleCustomerGstVisibility = () => {
-        const inputGroup = customerGstInput.closest('.input-group');
-        if (showCustomerGstCheckbox.checked) {
-            inputGroup.style.display = 'block';
-        } else {
-            inputGroup.style.display = 'none';
-        }
-    };
-
-
     // --- Event Listeners ---
     addItemBtn.addEventListener('click', addItem);
     generateBillBtn.addEventListener('click', generateBill);
     resetFormBtn.addEventListener('click', resetForm);
 
-    // Recalculate total on tax or discount rate change
     taxRateInput.addEventListener('input', calculateTotal);
     discountRateInput.addEventListener('input', calculateTotal);
 
-    // Dark Mode Toggle
     toggleDarkModeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         const isDarkMode = document.body.classList.contains('dark-mode');
         localStorage.setItem(LOCAL_STORAGE_DARK_MODE, isDarkMode);
     });
 
-    // Control Panel Toggle (3D background)
     togglePanelBtn.addEventListener('click', () => {
         controlPanel.classList.toggle('hidden');
     });
 
-    // Company Details Modal interactions
     showCompanyDetailsModalBtn.addEventListener('click', () => {
         if (!isLoggedIn()) {
             alert('Please login to manage company details.');
-            openSignInModalForLogin(); // Offer to login
+            openSignInModalForLogin();
             return;
         }
         companyDetailsModal.style.display = 'flex';
@@ -460,14 +445,9 @@ document.addEventListener('DOMContentLoaded', () => {
         companyDetailsModal.style.display = 'none';
     });
     saveCompanyDetailsBtn.addEventListener('click', saveCompanyDetails);
-    clearCompanyDetailsBtn.addEventListener('click', clearCompanyDetails); // NEW event listener
+    clearCompanyDetailsBtn.addEventListener('click', clearCompanyDetails);
     showCompanyGstCheckbox.addEventListener('change', toggleCompanyGstVisibility);
 
-    // Customer GST visibility
-    showCustomerGstCheckbox.addEventListener('change', toggleCustomerGstVisibility);
-
-
-    // Sign-In Modal interactions
     closeSignInModal.addEventListener('click', () => {
         signInModal.style.display = 'none';
     });
@@ -475,10 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
         isSignUpMode = !isSignUpMode;
         updateSignInSignUpModal();
     });
-    signInBtn.addEventListener('click', handleAuthAction); // Call the new handler
+    signInBtn.addEventListener('click', handleAuthAction);
 
-
-    // Close modals if clicking outside
     window.addEventListener('click', (event) => {
         if (event.target == companyDetailsModal) {
             companyDetailsModal.style.display = 'none';
@@ -489,14 +467,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Initializations on Load ---
-    addItem(); // Add one default item row when the page loads
-    loadCompanyDetails(); // Load company details on page load
-    loadDarkMode(); // Apply dark mode preference
-    initializeBillDate(); // Set current date
-    updateLoginStatusButton(); // Set initial text for login/logout button
-    updateSignInSignUpModal(); // Set initial state of sign-in modal (default to sign-in)
+    addItem();
+    loadCompanyDetails();
+    loadDarkMode();
+    initializeBillDate();
+    updateLoginStatusButton();
+    updateSignInSignUpModal();
 
-    calculateTotal(); // Initial calculation
+    calculateTotal();
 });
 
 // --- Three.js Background (Existing code - ensure Three.js library is loaded BEFORE this script) ---
@@ -555,7 +533,6 @@ const generateSprite = () => {
     context.fillRect(0, 0, canvas.width, canvas.height);
     return new THREE.CanvasTexture(canvas);
 };
-
 
 const animateThree = () => {
     requestAnimationFrame(animateThree);
