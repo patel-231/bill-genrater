@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayurveda Wellness Guide</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8; /* Light background */
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a7a7a7;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+
+        /* Modal specific styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem; /* Equivalent to p-10 */
+            border-radius: 1rem; /* Equivalent to rounded-xl */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Equivalent to shadow-lg */
+            max-width: 90%;
+            width: 600px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            max-height: 90vh; /* Limit height to viewport height */
+            overflow-y: auto; /* Enable scrolling within the modal if content is too long */
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #4a5568; /* gray-700 */
+            transition: color 0.2s ease;
+        }
+        .close-button:hover {
+            color: #1a202c; /* gray-900 */
+        }
+
+        /* Custom Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.01); /* Very slight increase */
+            }
+        }
+
+        @keyframes backgroundPan {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .animate-pulse-subtle {
+            animation: pulse-subtle 2s infinite ease-in-out;
+        }
+
+        .animated-background {
+            background-image: url('https://placehold.co/1200x600/008000/FFFFFF?text=Ayurveda+Background'); /* Fallback placeholder */
+            background-size: cover;
+            background-position: center center;
+            animation: backgroundPan 30s linear infinite alternate; /* Adjust duration as needed */
+            position: relative; /* Needed for pseudo-elements or overlay */
+            overflow: hidden; /* Ensure background animation doesn't cause overflow */
+        }
+        /* Add an overlay to ensure text readability over the background image */
+        .animated-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3); /* Dark overlay for text readability */
+            z-index: 1;
+        }
+        .animated-background > div {
+            position: relative;
+            z-index: 2; /* Ensure content is above the overlay */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-green-700 text-white shadow-lg py-4 px-6 md:px-12 rounded-b-xl fixed top-0 w-full z-50">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 md:mb-0">Ayurveda Living</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#products" class="hover:text-green-200 transition duration-300 text-lg">Products</a></li>
+                    <li><a href="#diet-plan" class="hover:text-green-200 transition duration-300 text-lg">Diet Plan</a></li>
+                    <li><a href="#weight-loss" class="hover:text-green-200 transition duration-300 text-lg">Weight Loss</a></li>
+                    <li><a href="#contact" class="hover:text-green-200 transition duration-300 text-lg">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- To prevent content from being hidden behind the fixed header, add padding to the body or the first section -->
+    <div class="pt-20"> <!-- Adjust this value based on your header's height -->
+
+        <!-- Hero Section -->
+        <!-- Added animated-background class and updated background-image to the provided URL -->
+        <section class="bg-gradient-to-r from-green-500 to-green-700 text-white py-16 px-6 md:px-12 text-center rounded-xl mx-4 my-8 shadow-xl animate-fadeInUp animated-background" style="background-image: url('https://raw.githubusercontent.com/mdn/learning-area/main/html/multimedia-and-embedding/images-and-videos/dinosaur.png');">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Embrace the Ancient Wisdom of Ayurveda</h2>
+                <p class="text-xl md:text-2xl mb-8">Discover holistic well-being through natural remedies, balanced diets, and mindful living.</p>
+                <a href="#products" class="bg-white text-green-700 hover:bg-green-100 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">Explore Our Offerings</a>
+            </div>
+        </section>
+
+        <!-- Ayurveda Products Section -->
+        <section id="products" class="container mx-auto py-16 px-6 md:px-12">
+            <h2 class="text-4xl font-bold text-center mb-12 text-green-800">Ayurvedic Products for Your Well-being</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Product Card 1 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border border-green-200">
+                    <img src="https://placehold.co/400x250/d1fae5/10b981?text=Herbal+Detox" alt="Herbal Detox Product" class="w-full h-48 object-cover rounded-lg mb-6 shadow-md">
+                    <h3 class="text-2xl font-semibold text-green-700 mb-3">Herbal Detox Blend</h3>
+                    <p class="text-gray-600 mb-4">A powerful blend of traditional herbs like Triphala and Neem to cleanse and rejuvenate your system.</p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4">
+                        <li>Supports digestive health</li>
+                        <li>Boosts natural detoxification</li>
+                        <li>Enhances energy levels</li>
+                    </ul>
+                    <button class="bg-green-600 text-white py-2 px-5 rounded-full hover:bg-green-700 transition duration-300">Learn More</button>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border border-green-200">
+                    <img src="https://placehold.co/400x250/d1fae5/10b981?text=Stress+Relief+Oil" alt="Stress Relief Oil Product" class="w-full h-48 object-cover rounded-lg mb-6 shadow-md">
+                    <h3 class="text-2xl font-semibold text-green-700 mb-3">Stress Relief Massage Oil</h3>
+                    <p class="text-gray-600 mb-4">Infused with Ashwagandha and Brahmi, this oil calms the mind and soothes tired muscles.</p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4">
+                        <li>Reduces anxiety and stress</li>
+                        <li>Promotes restful sleep</li>
+                        <li>Nourishes the skin</li>
+                    </ul>
+                    <button class="bg-green-600 text-white py-2 px-5 rounded-full hover:bg-green-700 transition duration-300">Learn More</button>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border border-green-200">
+                    <img src="https://placehold.co/400x250/d1fae5/10b980?text=Immunity+Booster" alt="Immunity Booster Product" class="w-full h-48 object-cover rounded-lg mb-6 shadow-md">
+                    <h3 class="text-2xl font-semibold text-green-700 mb-3">Immunity Booster Capsules</h3>
+                    <p class="text-gray-600 mb-4">Formulated with Giloy and Amla, these capsules strengthen your immune system naturally.</p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4">
+                        <li>Boosts natural immunity</li>
+                        <li>Protects against infections</li>
+                        <li>Rich in Vitamin C</li>
+                    </ul>
+                    <button class="bg-green-600 text-white py-2 px-5 rounded-full hover:bg-green-700 transition duration-300">Learn More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ayurvedic Diet Plan Section -->
+        <section id="diet-plan" class="bg-green-50 py-16 px-6 md:px-12 rounded-xl mx-4 my-8 shadow-inner">
+            <div class="container mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-green-800">Personalized Ayurvedic Diet Plans</h2>
+                <div class="flex flex-col lg:flex-row items-center lg:space-x-12">
+                    <div class="lg:w-1/2 mb-8 lg:mb-0">
+                        <img src="https://placehold.co/600x400/e0f2f7/007bff?text=Ayurvedic+Food" alt="Ayurvedic Food Spread" class="rounded-xl shadow-lg w-full h-auto object-cover">
+                    </div>
+                    <div class="lg:w-1/2">
+                        <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                            Ayurveda emphasizes that diet is foundational to health. Our personalized diet plans are tailored to your unique Dosha (Vata, Pitta, Kapha) to promote balance and vitality. Eating according to your Dosha helps optimize digestion, boost immunity, and maintain ideal weight.
+                        </p>
+                        <h3 class="text-2xl font-semibold text-green-700 mb-4">Key Principles of Ayurvedic Eating:</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                            <li>Eat fresh, seasonal, and locally sourced foods.</li>
+                            <li>Favor warm, cooked meals over cold, raw ones.</li>
+                            <li>Practice mindful eating – eat slowly and without distractions.</li>
+                            <li>Incorporate all six tastes: sweet, sour, salty, pungent, bitter, and astringent.</li>
+                            <li>Listen to your body's hunger cues.</li>
+                        </ul>
+                        <!-- Button to open the custom diet plan modal -->
+                        <button id="openCustomPlanModal" class="bg-green-600 text-white py-3 px-6 rounded-full hover:bg-green-700 transition duration-300 shadow-md">Get Your Custom Diet Plan</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ayurvedic Weight Loss Section -->
+        <section id="weight-loss" class="container mx-auto py-16 px-6 md:px-12">
+            <h2 class="text-4xl font-bold text-center mb-12 text-green-800">Ayurvedic Approach to Healthy Weight Loss</h2>
+            <div class="flex flex-col-reverse lg:flex-row items-center lg:space-x-12">
+                <div class="lg:w-1/2">
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        Ayurvedic weight loss isn't about restrictive diets but about restoring balance to your metabolism and digestive fire (Agni). It focuses on sustainable lifestyle changes that lead to natural, healthy weight management.
+                    </p>
+                    <h3 class="text-2xl font-semibold text-green-700 mb-4">Our Weight Loss Program Includes:</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                        <li><strong>Dosha-Specific Diet:</strong> Foods that reduce excess Kapha (often associated with weight gain).</li>
+                        <li><strong>Herbal Support:</strong> Natural herbs like Guggul and Garcinia to boost metabolism.</li>
+                        <li><strong>Detoxification (Panchakarma):</strong> Gentle cleansing therapies to remove toxins.</li>
+                        <li><strong>Yoga & Pranayama:</strong> Specific poses and breathing exercises to aid digestion and reduce stress.</li>
+                        <li><strong>Mindful Practices:</strong> Stress reduction techniques to prevent emotional eating.</li>
+                    </ul>
+                    <button class="bg-green-600 text-white py-3 px-6 rounded-full hover:bg-green-700 transition duration-300 shadow-md">Start Your Weight Loss Journey</button>
+                </div>
+                <div class="lg:w-1/2 mb-8 lg:mb-0">
+                    <img src="https://placehold.co/600x400/e6ffe6/006400?text=Weight+Loss+Yoga" alt="Yoga for Weight Loss" class="rounded-xl shadow-lg w-full h-auto object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action / Contact Section -->
+        <!-- Added animated-background class and updated background-image to the provided URL -->
+        <section id="contact" class="bg-green-700 text-white py-16 px-6 md:px-12 text-center rounded-xl mx-4 my-8 shadow-xl animate-pulse-subtle animated-background" style="background-image: url('https://raw.githubusercontent.com/mdn/learning-area/main/html/multimedia-and-embedding/images-and-videos/dinosaur.png');">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Ready to Transform Your Health?</h2>
+                <p class="text-xl md:text-2xl mb-8">Contact us today for a personalized consultation and begin your journey to holistic wellness.</p>
+                <a href="mailto:info@ayurvedaliving.com" class="bg-white text-green-700 hover:bg-green-100 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">Get in Touch</a>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <footer class="bg-gray-800 text-white py-8 px-6 md:px-12 rounded-t-xl">
+            <div class="container mx-auto text-center text-gray-400">
+                <p>&copy; 2025 Ayurveda Living. All rights reserved.</p>
+                <p class="mt-2">Designed with <span class="text-red-500">&hearts;</span> for holistic well-being.</p>
+            </div>
+        </footer>
+
+    </div> <!-- End of pt-20 div -->
+
+    <!-- Custom Diet Plan Modal -->
+    <div id="customPlanModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-button" id="closeModalBtn">&times;</span>
+            <h2 class="text-4xl font-bold text-center mb-8 text-green-800">Create Your Custom Ayurvedic Diet Plan</h2>
+            <p class="text-lg text-gray-700 mb-6 text-center">
+                Tell us about your preferences and we'll help you craft a diet plan aligned with your unique Ayurvedic constitution.
+            </p>
+            <form id="dietPlanForm" class="space-y-6">
+                <div>
+                    <label for="dosha" class="block text-gray-700 text-sm font-bold mb-2">Your Primary Dosha:</label>
+                    <select id="dosha" name="dosha" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500">
+                        <option value="">Select your Dosha</option>
+                        <option value="vata">Vata</option>
+                        <option value="pitta">Pitta</option>
+                        <option value="kapha">Kapha</option>
+                        <option value="tridoshic">Tridoshic (Balanced)</option>
+                    </select>
+                    <!-- Div to display Dosha description -->
+                    <div id="doshaDescription" class="mt-2 p-3 bg-blue-50 text-blue-800 rounded-lg text-sm hidden">
+                        <!-- Description will be loaded here by JavaScript -->
+                    </div>
+                </div>
+                <div>
+                    <label for="age" class="block text-gray-700 text-sm font-bold mb-2">Your Age:</label>
+                    <input type="number" id="age" name="age" min="1" max="120" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" placeholder="e.g., 30">
+                </div>
+                <div>
+                    <label for="preferences" class="block text-gray-700 text-sm font-bold mb-2">Dietary Preferences/Restrictions:</label>
+                    <textarea id="preferences" name="preferences" rows="4" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" placeholder="e.g., Vegetarian, Gluten-free, dislikes spicy food"></textarea>
+                </div>
+                <div>
+                    <label for="goals" class="block text-gray-700 text-sm font-bold mb-2">Your Health Goals:</label>
+                    <input type="text" id="goals" name="goals" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-green-500" placeholder="e.g., Weight loss, improved digestion, more energy">
+                </div>
+                <div class="text-center">
+                    <button type="submit" id="generatePlanBtn" class="bg-green-600 text-white py-3 px-8 rounded-full hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-105">Generate My Custom Plan</button>
+                </div>
+            </form>
+            <div id="planOutput" class="mt-8 p-6 bg-green-50 rounded-xl border border-green-100 hidden">
+                <h3 class="text-2xl font-semibold text-green-700 mb-4 text-center">Your Custom Diet Plan</h3>
+                <div id="generatedPlanContent" class="text-gray-700 leading-relaxed">
+                    <!-- Generated plan will be inserted here -->
+                </div>
+            </div>
+            <div id="loadingIndicator" class="mt-8 text-center text-green-700 hidden">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-4 border-green-500 border-opacity-75"></div>
+                <p class="mt-2">Generating your personalized plan...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const openModalBtn = document.getElementById('openCustomPlanModal');
+        const customPlanModal = document.getElementById('customPlanModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const dietPlanForm = document.getElementById('dietPlanForm');
+        const generatePlanBtn = document.getElementById('generatePlanBtn');
+        const planOutput = document.getElementById('planOutput');
+        const generatedPlanContent = document.getElementById('generatedPlanContent');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const doshaSelect = document.getElementById('dosha');
+        const doshaDescriptionDiv = document.getElementById('doshaDescription');
+        const ageInput = document.getElementById('age'); // Get the new age input element
+
+        const doshaMeanings = {
+            'vata': '<strong>Vata (Air & Ether):</strong> Governs movement, circulation, respiration, and nervous system functions. Individuals with Vata dominance tend to be energetic, creative, and prone to anxiety or dryness.',
+            'pitta': '<strong>Pitta (Fire & Water):</strong> Controls digestion, metabolism, body temperature, and transformation. Pitta individuals are often intelligent, ambitious, and may experience inflammation or irritability.',
+            'kapha': '<strong>Kapha (Earth & Water):</strong> Responsible for structure, lubrication, immunity, and stability. Kapha types are typically calm, strong, and may be prone to sluggishness or weight gain.',
+            'tridoshic': '<strong>Tridoshic (Balanced):</strong> Indicates a balanced state of all three Doshas. Maintaining this balance is key to optimal health in Ayurveda.'
+        };
+
+        // Function to open the modal
+        openModalBtn.addEventListener('click', function() {
+            customPlanModal.classList.add('show');
+            // Reset form and output when opening
+            dietPlanForm.reset();
+            planOutput.classList.add('hidden');
+            loadingIndicator.classList.add('hidden'); // Hide loading indicator
+            doshaDescriptionDiv.classList.add('hidden');
+            doshaDescriptionDiv.innerHTML = '';
+        });
+
+        // Function to close the modal
+        closeModalBtn.addEventListener('click', function() {
+            customPlanModal.classList.remove('show');
+        });
+
+        // Close modal if clicked outside the content
+        customPlanModal.addEventListener('click', function(event) {
+            if (event.target === customPlanModal) {
+                customPlanModal.classList.remove('show');
+            }
+        });
+
+        // Handle form submission inside the modal
+        dietPlanForm.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            planOutput.classList.add('hidden'); // Hide previous output
+            loadingIndicator.classList.remove('hidden'); // Show loading indicator
+            generatePlanBtn.disabled = true; // Disable button during generation
+
+            const selectedDosha = doshaSelect.value;
+            const age = ageInput.value; // Get the age value
+            const preferences = document.getElementById('preferences').value;
+            const goals = document.getElementById('goals').value;
+
+            const prompt = `Generate a personalized Ayurvedic diet plan based on the following information:
+                            Primary Dosha: ${selectedDosha || 'Not specified'}
+                            Age: ${age || 'Not specified'}
+                            Dietary Preferences/Restrictions: ${preferences || 'None'}
+                            Health Goals: ${goals || 'General well-being'}
+
+                            Provide a daily meal plan (Breakfast, Lunch, Dinner) with specific food suggestions suitable for the Dosha, age, and preferences. Also, include general Ayurvedic dietary advice relevant to the user's input. Format the response as a well-structured paragraph with clear headings for meals and advice.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Leave this as-is; Canvas will provide the key at runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    // More specific error message for 403
+                    if (response.status === 403) {
+                        throw new Error(`API Access Forbidden (Status 403): Please ensure your API key is correctly configured and has access to the Gemini API.`);
+                    } else {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    generatedPlanContent.innerHTML = text.replace(/\n/g, '<br>'); // Display the generated text, replacing newlines with <br> for HTML
+                    planOutput.classList.remove('hidden'); // Show the plan output
+                    planOutput.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to view the output
+                } else {
+                    generatedPlanContent.innerHTML = '<p class="text-red-600">Could not generate a plan. The API response was empty or malformed. Please try again.</p>';
+                    planOutput.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error generating plan:', error);
+                generatedPlanContent.innerHTML = `<p class="text-red-600">An error occurred: ${error.message}. Please check your browser console for more details and ensure your API key is valid.</p>`;
+                planOutput.classList.remove('hidden');
+            } finally {
+                loadingIndicator.classList.add('hidden'); // Hide loading indicator
+                generatePlanBtn.disabled = false; // Re-enable button
+            }
+        });
+
+        // JavaScript for Dosha description inside the modal
+        doshaSelect.addEventListener('change', function() {
+            const selectedDosha = this.value;
+            if (selectedDosha && doshaMeanings[selectedDosha]) {
+                doshaDescriptionDiv.innerHTML = doshaMeanings[selectedDosha];
+                doshaDescriptionDiv.classList.remove('hidden');
+            } else {
+                doshaDescriptionDiv.classList.add('hidden');
+                doshaDescriptionDiv.innerHTML = '';
+            }
+        });
+    </script>
+
+</body>
+</html>
